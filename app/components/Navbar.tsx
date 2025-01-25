@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import Image from "next/image"
+import logo from '../images/logo.png'
 
 export function Navbar() {
   const { address, isConnected } = useAccount()
@@ -8,8 +10,18 @@ export function Navbar() {
 
   return (
     <nav className="border-b">
-      <div className="flex h-16 items-center px-4">
-        <div className="ml-auto flex items-center space-x-4">
+      <div className="flex h-16 items-center px-4 justify-between max-w-7xl mx-auto">
+        <div className="flex items-center gap-4">
+          <Image 
+            src={logo}
+            alt="Visarely Punks Logo"
+            width={40}
+            height={40}
+            priority
+          />
+          <span className="text-xl font-bold">Visarely Punks</span>
+        </div>
+        <div className="flex items-center space-x-4">
           {isConnected ? (
             <>
               <span className="text-sm">

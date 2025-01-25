@@ -8,6 +8,11 @@ export function Navbar() {
   const { disconnect } = useDisconnect()
   const { connect, connectors } = useConnect()
 
+  const handleConnect = () => {
+    const connector = connectors[0]
+    if (connector) connect({ connector })
+  }
+
   return (
     <nav className="border-b">
       <div className="flex h-16 items-center px-4 justify-between max-w-7xl mx-auto">
@@ -35,12 +40,7 @@ export function Navbar() {
               </Button>
             </>
           ) : (
-            <Button 
-              onClick={() => {
-                const connector = connectors[0]
-                if (connector) connect({ connector })
-              }}
-            >
+            <Button onClick={handleConnect}>
               Connect Wallet
             </Button>
           )}

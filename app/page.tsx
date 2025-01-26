@@ -8,6 +8,17 @@ import { Navbar } from "./components/Navbar"
 import preview1 from './images/preview1.svg'
 import preview2 from './images/preview2.svg'
 import preview3 from './images/preview3.svg'
+import { MintDialog } from './components/MintDialog'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 const PREVIEW_IMAGES = [
   preview1,
@@ -19,6 +30,10 @@ const PREVIEW_IMAGES = [
 export default function Home() {
   const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0)
   const { isConnected } = useAccount()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [lastMintedId, setLastMintedId] = useState<number>()
+  const [viewingMint, setViewingMint] = useState(false)
+  const [showReloadAlert, setShowReloadAlert] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,6 +44,11 @@ export default function Home() {
 
     return () => clearInterval(timer)
   }, [])
+
+  const handleMintSuccess = (tokenId: number) => {
+    setLastMintedId(tokenId)
+    setIsDialogOpen(false)
+  }
 
   return (
     <div>
@@ -50,12 +70,62 @@ export default function Home() {
           />
         </div>
         
-        <Button 
-          className="w-[200px]"
-          disabled={!isConnected}
-        >
-          {isConnected ? 'Mint NFT' : 'Connect Wallet to Mint'}
-        </Button>
+        <div className="flex flex-col items-center gap-4">
+          {lastMintedId ? (
+            <>
+              <Button 
+                onClick={() => setShowReloadAlert(true)}
+                size="lg"
+              >
+                Mint Another NFT
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={() => {
+                  setViewingMint(true)
+                  setIsDialogOpen(true)
+                }}
+              >
+                See Recently Minted #{lastMintedId}
+              </Button>
+            </>
+          ) : (
+            <Button 
+              onClick={() => setIsDialogOpen(true)}
+              size="lg"
+            >
+              Mint NFT
+            </Button>
+          )}
+        </div>
+
+        <MintDialog 
+          isOpen={isDialogOpen}
+          onClose={() => {
+            setIsDialogOpen(false)
+            setViewingMint(false)
+          }}
+          onMintSuccess={handleMintSuccess}
+          viewMode={viewingMint}
+          existingTokenId={viewingMint ? lastMintedId : undefined}
+        />
+
+        <AlertDialog open={showReloadAlert} onOpenChange={setShowReloadAlert}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Reload Page to Mint Again</AlertDialogTitle>
+              <AlertDialogDescription>
+                To mint another NFT, the page needs to reload. Please select "Cancel" to continue viewing your current NFT, otherwise select "Proceed" to reload the page.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => window.location.reload()}>
+                Proceed
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </main>
     </div>
   );

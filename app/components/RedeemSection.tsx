@@ -24,7 +24,6 @@ export function RedeemSection() {
     abi: CONTRACT_ABI,
     functionName: 'balanceOf',
     args: [address!],
-    enabled: !!address,
   })
 
   // Contract writes

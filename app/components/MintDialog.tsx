@@ -9,7 +9,7 @@ import { createPublicClient, http, erc20Abi } from 'viem'
 import { sepolia } from 'viem/chains'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract'
 
-const USDC_ADDRESS = process.env.NEXT_PUBLIC_USDC_ADDRESS
+const USDC_ADDRESS = process.env.NEXT_PUBLIC_USDC_ADDRESS as `0x${string}`
 if (!USDC_ADDRESS) {
   throw new Error('USDC_ADDRESS not found in environment variables')
 }
@@ -24,6 +24,8 @@ interface MintDialogProps {
   isOpen: boolean
   onClose: () => void
   onMintSuccess: (tokenId: number) => void
+  viewMode?: boolean
+  existingTokenId?: number
 }
 
 export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: MintDialogProps) {
@@ -40,7 +42,6 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
     abi: erc20Abi,
     functionName: 'allowance',
     args: [address!, CONTRACT_ADDRESS],
-    enabled: !!address,
   })
 
   // Combine chain allowance with local state
@@ -236,7 +237,6 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
     >
       <DialogContent 
         className="sm:max-w-[600px]"
-        closeButton={false}
         onEscapeKeyDown={(e) => e.preventDefault()}
         onPointerDownOutside={(e) => {
           if (!isMintSuccess) {

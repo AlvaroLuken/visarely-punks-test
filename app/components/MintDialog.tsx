@@ -1,203 +1,312 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract'
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useContractRead } from 'wagmi'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Loader2 } from "lucide-react"
+import { Loader2, ExternalLink, Share2, X } from "lucide-react"
+import { createPublicClient, http, erc20Abi } from 'viem'
+import { sepolia } from 'viem/chains'
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract'
 
-export function MintDialog({ 
-  isOpen, 
-  onClose,
-  onMintSuccess,
-  viewMode,
-  existingTokenId
-}: { 
+const USDC_ADDRESS = process.env.NEXT_PUBLIC_USDC_ADDRESS
+if (!USDC_ADDRESS) {
+  throw new Error('USDC_ADDRESS not found in environment variables')
+}
+
+const MINT_PRICE = 1_000_000n // 1 USDC for testnet
+const publicClient = createPublicClient({
+  chain: sepolia,
+  transport: http(`https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`)
+})
+
+interface MintDialogProps {
   isOpen: boolean
   onClose: () => void
   onMintSuccess: (tokenId: number) => void
-  viewMode?: boolean
-  existingTokenId?: number
-}) {
-  const { address } = useAccount()
-  const [tokenId, setTokenId] = useState<number>()
+}
+
+export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: MintDialogProps) {
+  const { address, isConnected } = useAccount()
+  const [isOpen, setIsOpen] = useState(initialIsOpen)
+  const [isApproved, setIsApproved] = useState(false)
+  const [isCheckingApproval, setIsCheckingApproval] = useState(false)
   const [error, setError] = useState<string>()
-  const [imageUrl, setImageUrl] = useState<string>()
-  const { writeContract, data: hash, isPending, error: writeError } = useWriteContract()
+  const [tokenId, setTokenId] = useState<number>()
+  const [svgData, setSvgData] = useState<string>()
+  const [localAllowance, setLocalAllowance] = useState<bigint>(0n)
   
-  const { isLoading, isSuccess, error: waitError, data: receipt } = useWaitForTransactionReceipt({
-    hash,
-    timeout: 30_000,
+  // Get current allowance
+  const { data: allowance, refetch: refetchAllowance } = useContractRead({
+    address: USDC_ADDRESS,
+    abi: erc20Abi,
+    functionName: 'allowance',
+    args: [address!, CONTRACT_ADDRESS],
+    enabled: !!address,
   })
 
-  useEffect(() => {
-    if (viewMode && existingTokenId) {
-      setTokenId(existingTokenId)
-      fetchTokenURI(existingTokenId)
-    }
-  }, [viewMode, existingTokenId])
+  // Combine chain allowance with local state
+  const effectiveAllowance = localAllowance || allowance || 0n
 
-  useEffect(() => {
-    if (receipt) {
-      try {
-        const transferLog = receipt.logs.find(log => 
-          log.topics[0] === '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
-        )
-        
-        if (transferLog && transferLog.topics[3]) {
-          const newTokenId = parseInt(transferLog.topics[3], 16)
-          setTokenId(newTokenId)
-          fetchTokenURI(newTokenId)
-        }
-      } catch (e) {
-        console.error('Error parsing token ID:', e)
-        setError('Failed to get token ID')
-      }
-    }
-  }, [receipt])
+  // Approve USDC
+  const { writeContract: approveUsdc, data: approveHash } = useWriteContract()
+  
+  const { isLoading: isApproveLoading, isSuccess: isApproveSuccess } = 
+    useWaitForTransactionReceipt({
+      hash: approveHash,
+    })
 
-  async function fetchTokenURI(tokenId: number) {
+  // Update local allowance immediately after approval
+  useEffect(() => {
+    if (isApproveSuccess) {
+      setLocalAllowance(MINT_PRICE)
+      // Refetch actual allowance in background
+      refetchAllowance()
+    }
+  }, [isApproveSuccess, refetchAllowance])
+
+  const handleApprove = async () => {
     try {
-      const response = await fetch(`/api/nft/${tokenId}`)
-      if (response.ok) {
-        const data = await response.text()
-        setImageUrl(data)
+      approveUsdc({
+        address: USDC_ADDRESS,
+        abi: erc20Abi,
+        functionName: 'approve',
+        args: [CONTRACT_ADDRESS, MINT_PRICE],
+      })
+    } catch (error) {
+      console.error('Error approving USDC:', error)
+    }
+  }
+
+  // Contract writes
+  const { writeContract: writeUSDC, data: approvalHash } = useWriteContract()
+  const { writeContract: writeMint, data: mintHash } = useWriteContract()
+
+  // Transaction receipts
+  const { isLoading: isApprovalLoading, isSuccess: isApprovalSuccess } = useWaitForTransactionReceipt({
+    hash: approvalHash,
+  })
+  const { isLoading: isMintLoading, isSuccess: isMintSuccess } = useWaitForTransactionReceipt({
+    hash: mintHash,
+  })
+
+  // Force dialog to stay open during and after mint
+  const [forceOpen, setForceOpen] = useState(false)
+  
+  // Monitor mint loading and success to force dialog open
+  useEffect(() => {
+    if (isMintLoading || isMintSuccess) {
+      setForceOpen(true)
+    }
+  }, [isMintLoading, isMintSuccess])
+
+  // Sync with parent's isOpen prop
+  useEffect(() => {
+    setIsOpen(initialIsOpen)
+  }, [initialIsOpen])
+
+  // Handle explicit close
+  const handleClose = () => {
+    if (!isMintLoading && !isMintSuccess) {
+      setIsOpen(false)
+      onClose()
+    }
+  }
+
+  // Handle NFT mint
+  const handleMint = async () => {
+    try {
+      console.log('Minting NFT...')
+      await writeMint({
+        address: CONTRACT_ADDRESS,
+        abi: CONTRACT_ABI,
+        functionName: 'mint',
+      })
+    } catch (e) {
+      console.error('Mint error:', e)
+      setError(e instanceof Error ? e.message : 'Failed to mint')
+    }
+  }
+
+  // Fetch NFT data
+  const fetchNFTData = async (tokenId: number) => {
+    try {
+      console.log('Fetching token URI for:', tokenId)
+      const uri = await publicClient.readContract({
+        address: CONTRACT_ADDRESS,
+        abi: CONTRACT_ABI,
+        functionName: 'tokenURI',
+        args: [BigInt(tokenId)]
+      })
+      console.log('Raw token URI:', uri)
+
+      let jsonMetadata;
+
+      if (uri.startsWith('data:application/json;base64,')) {
+        // Decode base64-encoded JSON metadata
+        const jsonString = atob(uri.split(',')[1])
+        jsonMetadata = JSON.parse(jsonString)
+      } else if (uri.startsWith('{')) {
+        // If it's already a JSON string, parse it directly
+        jsonMetadata = JSON.parse(uri)
+      } else if (uri.startsWith('http')) {
+        // If it's a URL, fetch metadata from it
+        const response = await fetch(uri)
+        jsonMetadata = await response.json()
+      } else {
+        throw new Error('Unsupported tokenURI format')
+      }
+
+      console.log('Decoded Metadata:', jsonMetadata)
+
+      if (jsonMetadata.image) {
+        setSvgData(jsonMetadata.image)
+      } else {
+        throw new Error('Metadata does not contain an image field')
       }
     } catch (e) {
       console.error('Error fetching token URI:', e)
     }
   }
 
-  const handleMint = async () => {
+  // Monitor mint success
+  useEffect(() => {
+    if (isMintSuccess && mintHash) {
+      console.log('Mint successful, getting transaction receipt...')
+      publicClient.getTransactionReceipt({ hash: mintHash })
+        .then(async (receipt) => {
+          console.log('Full receipt:', receipt)
+          
+          const total = await publicClient.readContract({
+            address: CONTRACT_ADDRESS,
+            abi: CONTRACT_ABI,
+            functionName: 'totalMinted',
+          })
+          
+          const newTokenId = Number(total)
+          console.log('New token ID:', newTokenId)
+          setTokenId(newTokenId)
+          await fetchNFTData(newTokenId)
+          // Call onMintSuccess but don't close the dialog
+          onMintSuccess(newTokenId)
+        })
+        .catch(console.error)
+    }
+  }, [isMintSuccess, mintHash])
+
+  const renderButton = () => {
     if (!address) {
-      setError('Please connect your wallet first')
-      return
+      return <Button disabled>Connect Wallet to Mint</Button>
     }
 
-    try {
-      setError(undefined)
-      const tx = await writeContract({
-        address: CONTRACT_ADDRESS as `0x${string}`,
-        abi: CONTRACT_ABI,
-        functionName: 'mintTo',
-        args: [address],
-      })
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to mint')
+    if (isApproveLoading) {
+      return (
+        <Button disabled>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Approving USDC...
+        </Button>
+      )
     }
-  }
 
-  const displayError = error || writeError?.message || waitError?.message
-
-  const tweetIntent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    `Just minted my Visarely Punk #${tokenId}! 🎨\n\nhttps://basescan.org/token/${CONTRACT_ADDRESS}/${tokenId}`
-  )}`
-
-  const openSeaUrl = tokenId ? 
-    `https://testnets.opensea.io/assets/base_sepolia/${CONTRACT_ADDRESS}/${tokenId}` : 
-    undefined
-
-  const handleClose = () => {
-    if (!viewMode && tokenId && isSuccess) {
-      onMintSuccess(tokenId)
+    if (effectiveAllowance < MINT_PRICE) {
+      return (
+        <Button onClick={handleApprove}>
+          Approve USDC
+        </Button>
+      )
     }
-    onClose()
+
+    if (isMintLoading) {
+      return (
+        <Button disabled>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          Minting...
+        </Button>
+      )
+    }
+
+    return (
+      <Button onClick={handleMint}>
+        Mint NFT
+      </Button>
+    )
   }
 
   return (
     <Dialog 
-      open={isOpen} 
+      // Use forceOpen to keep dialog open
+      open={forceOpen || isOpen}
       onOpenChange={(open) => {
-        if (!open && isSuccess) {
-          handleClose()
+        // Only allow closing by clicking outside after mint success
+        if (!open && isMintSuccess) {
+          setForceOpen(false)
+          onClose()
         }
       }}
     >
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent 
+        className="sm:max-w-[600px]"
+        closeButton={false}
+        onEscapeKeyDown={(e) => e.preventDefault()}
+        onPointerDownOutside={(e) => {
+          if (!isMintSuccess) {
+            e.preventDefault()
+          }
+        }}
+      >
         <DialogHeader>
           <DialogTitle className="text-2xl text-center">
-            {!hash ? 'Mint Your NFT' : 
-             isLoading ? 'Processing Transaction...' : 
-             isSuccess ? `Successfully Minted #${tokenId}!` : 
-             'Something went wrong'}
+            {isMintSuccess && tokenId ? 
+              `Successfully Minted #${tokenId}!` : 
+              'Mint Your NFT'
+            }
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col items-center gap-6 py-6">
-          {displayError && (
-            <p className="text-red-500 text-sm">{displayError}</p>
-          )}
-          
-          {!hash ? (
-            <Button onClick={handleMint} disabled={isPending}>
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Confirm in Wallet
-                </>
-              ) : (
-                'Mint NFT'
-              )}
-            </Button>
-          ) : isLoading ? (
-            <div className="flex flex-col items-center gap-2">
-              <Loader2 className="h-8 w-8 animate-spin" />
-              <p className="text-sm text-gray-500">
-                Transaction in progress...
-              </p>
-            </div>
-          ) : isSuccess ? (
-            <div className="flex flex-col items-center gap-6">
-              <p className="text-xl font-bold">
-                Visarely Punk #{tokenId}
-              </p>
+        <div className="flex flex-col items-center gap-6">
+          {isMintSuccess && tokenId && svgData ? (
+            <>
               <div className="w-80 h-80 rounded-lg overflow-hidden bg-gray-100">
-                {imageUrl ? (
-                  <div 
-                    className="w-full h-full"
-                    dangerouslySetInnerHTML={{ __html: imageUrl }}
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full">
-                    <Loader2 className="h-8 w-8 animate-spin" />
-                  </div>
-                )}
+                <img 
+                  src={svgData}
+                  alt={`Visarely Punk #${tokenId}`}
+                  className="w-full h-full object-contain"
+                />
               </div>
-              <div className="flex flex-col gap-3 w-full">
-                <Button asChild className="w-full py-6">
-                  <a href={tweetIntent} target="_blank" rel="noopener noreferrer">
-                    Share on Twitter
-                  </a>
-                </Button>
-                <Button 
-                  asChild 
+              <div className="flex flex-col w-full gap-3">
+                <Button
+                  onClick={() => window.open(`https://testnets.opensea.io/assets/sepolia/${CONTRACT_ADDRESS}/${tokenId}`, '_blank')}
                   variant="outline"
-                  className="w-full py-6"
+                  size="lg"
+                  className="gap-2"
                 >
-                  <a 
-                    href={openSeaUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <img 
-                      src="/opensea.svg" 
-                      alt="OpenSea" 
-                      className="w-5 h-5"
-                    />
-                    View on OpenSea
-                  </a>
+                  <img 
+                    src="/opensea.svg" 
+                    alt="OpenSea" 
+                    className="w-5 h-5"
+                  />
+                  See on OpenSea
+                </Button>
+                <Button
+                  onClick={() => window.open(`https://twitter.com/intent/tweet?text=Just minted Visarely Punk %23${tokenId}! 🎨&url=https://testnets.opensea.io/assets/sepolia/${CONTRACT_ADDRESS}/${tokenId}`, '_blank')}
+                  variant="outline"
+                  size="lg"
+                  className="gap-2"
+                >
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  Share on X
                 </Button>
               </div>
-            </div>
+            </>
           ) : (
-            <div className="text-center">
-              <p className="text-red-500">Transaction failed. Please try again.</p>
-              <Button onClick={handleMint} className="mt-4">
-                Retry Mint
-              </Button>
-            </div>
+            <>
+              {error && (
+                <p className="text-red-500 text-sm">{error}</p>
+              )}
+              {renderButton()}
+            </>
           )}
         </div>
       </DialogContent>

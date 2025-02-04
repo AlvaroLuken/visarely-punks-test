@@ -5,9 +5,7 @@ import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
 import { Button } from "@/components/ui/button"
 import { Navbar } from "./components/Navbar"
-import preview1 from './images/preview1.svg'
-import preview2 from './images/preview2.svg'
-import preview3 from './images/preview3.svg'
+import { PREVIEW_IMAGES } from './lib/constants'
 import { MintDialog } from './components/MintDialog'
 import {
   AlertDialog,
@@ -19,13 +17,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-
-const PREVIEW_IMAGES = [
-  preview1,
-  preview2,
-  preview3,
-  // Add more SVG paths as needed
-]
+import { FloatingFaces } from './components/FloatingFaces'
+import { InfoTabs } from './components/InfoTabs'
+import { Footer } from "./components/Footer"
+import baseNetworkLogo from './images/brands/Base_Network_Logo.svg'
+import usdcLogo from './images/brands/usdc_icon.png'
+import { RedeemSection } from './components/RedeemSection'
 
 export default function Home() {
   const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0)
@@ -51,53 +48,132 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <Navbar />
-      <main className="container mx-auto p-4 flex flex-col items-center gap-8">
-        <div className="text-center max-w-2xl">
-          <h1 className="text-4xl font-bold mt-8 mb-4">Visarely Punks</h1>
-          <p className="text-gray-600 text-lg px-4">
-            A generative art collection merging Victor Vasarely&apos;s optical art mastery with CryptoPunks&apos; iconic aesthetic. Each piece features mathematically-derived wave patterns hosting unique punk characters with varying traits. From rare 8-piece grids to dense 24-character compositions, every mint produces distinct arrangements determined by the minter&apos;s address.
-          </p>
-        </div>
-        <div className="w-[300px] h-[300px] border-2 border-dashed rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden">
-          <Image 
-            src={PREVIEW_IMAGES[currentPreviewIndex]}
-            alt="NFT Preview" 
-            width={280} 
-            height={280}
-            className="rounded-lg object-cover transition-opacity duration-500"
-          />
-        </div>
+    <div className="relative min-h-screen bg-white">
+      <div className="absolute inset-0">
+        <FloatingFaces opacity={0.07} isDialog={false} />
+      </div>
+      <div className="relative">
+        <Navbar />
         
-        <div className="flex flex-col items-center gap-4">
-          {lastMintedId ? (
-            <>
-              <Button 
-                onClick={() => setShowReloadAlert(true)}
-                size="lg"
-              >
-                Mint Another NFT
-              </Button>
-              <Button 
-                variant="outline"
-                onClick={() => {
-                  setViewingMint(true)
-                  setIsDialogOpen(true)
-                }}
-              >
-                See Recently Minted #{lastMintedId}
-              </Button>
-            </>
-          ) : (
-            <Button 
-              onClick={() => setIsDialogOpen(true)}
-              size="lg"
-            >
-              Mint NFT
-            </Button>
-          )}
-        </div>
+        {/* Hero Section */}
+        <main className="container mx-auto p-4">
+          <div className="flex flex-col md:flex-row md:items-center md:gap-16 md:min-h-[calc(100vh-100px)]">
+            {/* Left column - Description */}
+            <div className="flex-1 text-center md:text-left">
+              <div className="bg-white/50 backdrop-blur-md rounded-2xl p-8 shadow-sm">
+                <h1 className="text-5xl font-bold mb-6 text-gray-900">
+                  Visarely Punks
+                </h1>
+                <p className="text-gray-800 text-lg mb-0 leading-relaxed">
+                  A generative art collection merging Victor Vasarely&apos;s optical art mastery with CryptoPunks&apos; iconic aesthetic. Each piece features mathematically-derived wave patterns hosting unique punk characters with varying traits. From rare 8-piece grids to dense 24-character compositions, every mint produces distinct arrangements determined by the minter&apos;s address.
+                </p>
+              </div>
+            </div>
+
+            {/* Right column - Preview and Mint */}
+            <div className="flex-1 flex flex-col items-center gap-8 mt-6 md:mt-0">
+              <div className="w-[450px] h-[450px] border-2 border-dashed rounded-xl flex items-center justify-center backdrop-blur-sm overflow-hidden hover:scale-105 transition-transform duration-300">
+                <Image 
+                  src={PREVIEW_IMAGES[currentPreviewIndex]}
+                  alt="NFT Preview" 
+                  width={430} 
+                  height={430}
+                  className="rounded-lg object-cover transition-opacity duration-500"
+                  priority
+                />
+              </div>
+              
+              <div className="flex flex-col items-center gap-4 rounded-2xl p-4 backdrop-blur-sm w-full max-w-[450px]">
+                {lastMintedId ? (
+                  <>
+                    <Button 
+                      onClick={() => setShowReloadAlert(true)}
+                      size="lg"
+                      className="w-full py-6 text-lg font-bold hover:scale-105 transition-transform duration-200"
+                    >
+                      Mint Another NFT
+                    </Button>
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        setViewingMint(true)
+                        setIsDialogOpen(true)
+                      }}
+                      className="w-full py-4"
+                    >
+                      See Recently Minted #{lastMintedId}
+                    </Button>
+                  </>
+                ) : (
+                  <Button 
+                    onClick={() => setIsDialogOpen(true)}
+                    size="lg"
+                    className="w-full py-6 text-lg font-bold hover:scale-105 transition-transform duration-200"
+                  >
+                    Mint NFT
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {/* Stats Section - New */}
+        <main className="container mx-auto px-4 py-12">
+          <div className="bg-white/50 backdrop-blur-md rounded-2xl p-8 shadow-sm">
+            <div className="grid md:grid-cols-4 gap-8 text-center">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Supply</h3>
+                <p className="text-gray-800 text-lg mt-1">2000</p>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Blockchain</h3>
+                <div className="flex items-center justify-center gap-2 mt-1">
+                  <Image 
+                    src={baseNetworkLogo} 
+                    alt="Base Network" 
+                    width={20} 
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                  <p className="text-gray-800 text-lg">Base</p>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Mint Price</h3>
+                <div className="flex items-center justify-center gap-2 mt-1">
+                  <Image 
+                    src={usdcLogo} 
+                    alt="USDC" 
+                    width={20} 
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                  <p className="text-gray-800 text-lg">500 USDC</p>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Traits</h3>
+                <p className="text-gray-800 text-lg mt-1">8-24 Characters</p>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {/* Add RedeemSection before the Learn More section */}
+        <RedeemSection />
+        
+        {/* Learn More Section */}
+        <main className="container mx-auto px-4 py-24 min-h-screen flex items-center">
+          <div className="w-full max-w-6xl mx-auto">
+            <h2 className="text-5xl font-bold text-center mb-16 text-gray-900">
+              Learn More
+            </h2>
+            <InfoTabs />
+          </div>
+        </main>
+
+        <Footer />
 
         <MintDialog 
           isOpen={isDialogOpen}
@@ -126,7 +202,7 @@ export default function Home() {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      </main>
+      </div>
     </div>
   );
 }

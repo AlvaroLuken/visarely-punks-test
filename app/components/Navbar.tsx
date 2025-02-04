@@ -1,23 +1,19 @@
-import { Button } from "@/components/ui/button"
+'use client'
+
 import Image from "next/image"
 import logo from '../images/logo.png'
 import { ConnectKitButton } from "connectkit"
 
 export function Navbar() {
   return (
-    <nav className="border-b">
-      <div className="flex h-16 items-center px-4 justify-between max-w-7xl mx-auto">
-        <div className="flex items-center gap-4">
-          <Image 
-            src={logo}
-            alt="Visarely Punks Logo"
-            width={40}
-            height={40}
-            priority
-          />
-          <span className="text-xl font-bold">Visarely Punks</span>
+    <nav className="border-b bg-white/50 backdrop-blur-md sticky top-0 z-50">
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex justify-between items-center">
+          <div className="text-xl font-bold">
+            Visarely Punks
+          </div>
+          <ConnectKitButton />
         </div>
-        <ConnectKitButton />
       </div>
     </nav>
   )

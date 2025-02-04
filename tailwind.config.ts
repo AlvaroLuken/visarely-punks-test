@@ -55,6 +55,26 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			float: {
+  				'0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+  				'50%': { transform: 'translateY(-20px) rotate(10deg)' }
+  			},
+  			'gradient-x': {
+  				'0%, 100%': {
+  					'background-size': '200% 200%',
+  					'background-position': 'left center'
+  				},
+  				'50%': {
+  					'background-size': '200% 200%',
+  					'background-position': 'right center'
+  				}
+  			}
+  		},
+  		animation: {
+  			float: 'float 10s ease-in-out infinite',
+  			'gradient-x': 'gradient-x 15s ease infinite'
   		}
   	}
   },

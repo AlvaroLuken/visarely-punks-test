@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useState, useEffect } from 'react'
-import { useAccount } from 'wagmi'
 import { Button } from "@/components/ui/button"
 import { Navbar } from "./components/Navbar"
 import { PREVIEW_IMAGES } from './lib/constants'
@@ -190,7 +189,7 @@ export default function Home() {
             <AlertDialogHeader>
               <AlertDialogTitle>Reload Page to Mint Again</AlertDialogTitle>
               <AlertDialogDescription>
-                To mint another NFT, the page needs to reload. Please select "Cancel" to continue viewing your current NFT, otherwise select "Proceed" to reload the page.
+                To mint another NFT, the page needs to reload. Please select &quot;Cancel&quot; to continue viewing your current NFT, otherwise select &quot;Proceed&quot; to reload the page.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

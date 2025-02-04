@@ -1,9 +1,6 @@
 'use client'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import Image from "next/image"
-import baseNetworkLogo from '../images/brands/Base_Network_Logo.svg'
-import usdcLogo from '../images/brands/usdc_icon.png'
 import { useState, useEffect } from 'react'
 import { createPublicClient, http, formatUnits } from 'viem'
 import { sepolia } from 'viem/chains'
@@ -84,7 +81,6 @@ export function InfoTabs() {
 
         // Calculate APY from liquidityRate (RAY = 1e27)
         const RAY = 10n ** 27n
-        const SECONDS_PER_YEAR = 31536000n
         const liquidityRate = reserveData.currentLiquidityRate
         const depositAPR = (liquidityRate * 100n) / RAY
         const depositAPY = (((1 + Number(depositAPR) / 100 / 31536000) ** 31536000) - 1) * 100
@@ -126,7 +122,7 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold text-gray-900">The Vision</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Visarely Punks combines the mathematical precision of Victor Vasarely's op art with 
+                  Visarely Punks combines the mathematical precision of Victor Vasarely&apos;s op art with
                   the rebellious spirit of CryptoPunks. Each piece is a unique composition where 
                   geometric patterns meet punk aesthetics.
                 </p>
@@ -135,7 +131,7 @@ export function InfoTabs() {
                 <h3 className="text-xl font-semibold text-gray-900">The Technology</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
                   Built on Base, each NFT is generated on-chain using advanced SVG manipulation. 
-                  The minter's address influences the final composition, ensuring true 
+                  The minter&apos;s address influences the final composition, ensuring true
                   randomness and uniqueness.
                 </p>
               </div>

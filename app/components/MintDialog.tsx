@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useContractRead } from 'wagmi'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Loader2, ExternalLink, Share2, X } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { createPublicClient, http, erc20Abi } from 'viem'
 import { sepolia } from 'viem/chains'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract'
@@ -27,10 +27,8 @@ interface MintDialogProps {
 }
 
 export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: MintDialogProps) {
-  const { address, isConnected } = useAccount()
+  const { address } = useAccount()
   const [isOpen, setIsOpen] = useState(initialIsOpen)
-  const [isApproved, setIsApproved] = useState(false)
-  const [isCheckingApproval, setIsCheckingApproval] = useState(false)
   const [error, setError] = useState<string>()
   const [tokenId, setTokenId] = useState<number>()
   const [svgData, setSvgData] = useState<string>()
@@ -79,11 +77,11 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
   }
 
   // Contract writes
-  const { writeContract: writeUSDC, data: approvalHash } = useWriteContract()
+  const { data: approvalHash } = useWriteContract()
   const { writeContract: writeMint, data: mintHash } = useWriteContract()
 
   // Transaction receipts
-  const { isLoading: isApprovalLoading, isSuccess: isApprovalSuccess } = useWaitForTransactionReceipt({
+  useWaitForTransactionReceipt({
     hash: approvalHash,
   })
   const { isLoading: isMintLoading, isSuccess: isMintSuccess } = useWaitForTransactionReceipt({
@@ -104,14 +102,6 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
   useEffect(() => {
     setIsOpen(initialIsOpen)
   }, [initialIsOpen])
-
-  // Handle explicit close
-  const handleClose = () => {
-    if (!isMintLoading && !isMintSuccess) {
-      setIsOpen(false)
-      onClose()
-    }
-  }
 
   // Handle NFT mint
   const handleMint = async () => {

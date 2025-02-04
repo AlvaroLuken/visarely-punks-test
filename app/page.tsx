@@ -26,7 +26,6 @@ import { RedeemSection } from './components/RedeemSection'
 
 export default function Home() {
   const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0)
-  const { isConnected } = useAccount()
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [lastMintedId, setLastMintedId] = useState<number>()
   const [viewingMint, setViewingMint] = useState(false)

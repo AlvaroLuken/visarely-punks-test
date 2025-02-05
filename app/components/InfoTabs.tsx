@@ -132,7 +132,7 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold text-gray-900">The Technology</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Built on Base, each NFT is generated on-chain using advanced SVG manipulation. 
+                  Built on Base, each NFT is generated onchain using advanced SVG manipulation. 
                   The minter&apos;s address influences the final composition, ensuring true
                   randomness and uniqueness.
                 </p>
@@ -365,7 +365,7 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">What is Visarely Punks?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Visarely Punks is a collection of 2000 unique NFTs, each generated on-chain using advanced SVG manipulation. The minter&apos;s address influences the final composition, ensuring true randomness and uniqueness.
+                  Visarely Punks is a collection of 2000 unique NFTs, each generated onchain using advanced SVG manipulation. The minter&apos;s address influences the final composition, ensuring true randomness and uniqueness.
                 </p>
               </div>
               <div className="space-y-4">
@@ -377,7 +377,7 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">What makes each NFT unique?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Each NFT is generated on-chain using advanced SVG manipulation. The minter&apos;s address influences the final composition, ensuring true randomness and uniqueness. The final NFT could be a simple (but beautiful) geometric pattern, an alien with a top hat, or a combination of both. The combinations are endless!
+                  Each NFT is generated onchain using advanced SVG manipulation. The minter&apos;s address influences the final composition, ensuring true randomness and uniqueness. The final NFT could be a simple (but beautiful) geometric pattern, an alien with a top hat, or a combination of both. The combinations are endless!
                 </p>
               </div>
               <div className="space-y-4">

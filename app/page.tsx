@@ -94,7 +94,7 @@ export default function Home() {
                   Visarely Punks
                 </h1>
                 <p className="text-gray-800 text-lg mb-0 leading-relaxed">
-                  A generative art collection where every piece is fully on-chain and deterministically generated from your wallet address and token ID. Each unique composition merges Victor Vasarely&apos;s optical art mastery with CryptoPunks&apos; iconic aesthetic, featuring mathematically-derived wave patterns.
+                  A generative art collection where every piece is fully onchain and deterministically generated from your wallet address and token ID. Each unique composition merges Victor Vasarely&apos;s optical art mastery with CryptoPunks&apos; iconic aesthetic, featuring mathematically-derived wave patterns.
                 </p>
               </div>
             </div>

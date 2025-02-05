@@ -111,17 +111,38 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
   const handleMint = async () => {
     console.log('Starting mint process...')
     
+    if (!address) {
+      console.error('No wallet connected')
+      return
+    }
+
     try {
-      writeMint({
+      const { request } = await publicClient.simulateContract({
         address: CONTRACT_ADDRESS,
         abi: CONTRACT_ABI,
         functionName: 'mint',
-        args: []
+        account: address,
       })
+      console.log('Simulation successful, sending transaction...')
+
+      writeMint(request)
     } catch (error) {
-      console.error('Error minting:', error)
+      console.error('Error in mint process:', error)
     }
   }
+
+  // Add this to help debug
+  useEffect(() => {
+    console.log('Contract state:', {
+      address,
+      CONTRACT_ADDRESS,
+      effectiveAllowance,
+      MINT_PRICE,
+      isMintLoading,
+      mintHash,
+      error: error
+    })
+  }, [address, effectiveAllowance, isMintLoading, mintHash, error])
 
   // Add this effect to monitor the transaction
   useEffect(() => {

@@ -234,7 +234,7 @@ export function InfoTabs() {
                   <h4 className="font-semibold text-gray-900 mb-2">Distribution</h4>
                   <p className="text-gray-800 text-lg space-y-4">
                     <span className="block">2000 NFTs are for sale at 500 USDC each.</span>
-                    <span className="block">Until all 2000 NFTs are minted, the collection will be considered "pre-launch" and holders can get a refund on their NFT (minus a 10% tax, which is kept by the Visarely Treasury).</span>
+                    <span className="block">Until all 2000 NFTs are minted, the collection will be considered &quot;pre-launch&quot; and holders can get a refund on their NFT (minus a 10% tax, which is kept by the Visarely Treasury).</span>
                   </p>
                 </div>
                 <div className="text-center p-6 rounded-lg bg-gray-50/80 backdrop-blur-sm">
@@ -289,7 +289,7 @@ export function InfoTabs() {
                   <p className="mt-2 text-red-500 text-sm">{error}</p>
                 )}
                 <p className="mt-4 text-sm text-gray-600">
-                  All mint proceeds are automatically supplied to Aave v3 on Sepolia, earning yield for the DAO treasury.
+                  All mint proceeds are automatically supplied to Aave v3 on Base, earning yield for the DAO treasury.
                 </p>
               </div>
             </div>
@@ -386,7 +386,7 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">How is this project different from other NFT projects?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Well, for one, the primary sales are immediately deposited into Aave v3 on Base to immediately start making the NFT project itself richer. Every other NFT mint you've ever participated in has it so that the primary market sales AND secondary market sales go into the founder wallet for completely mysterious reasons. Are they going to use those funds to grow the NFT project or buy a lambo for the founding team? This project is different, I just want to make the NFT project itself richer indefinitely and see where that goes. I don't pay myself anything of course, I'm just in this for the fun and life XP.
+                  Well, for one, the primary sales are immediately deposited into Aave v3 on Base to immediately start making the NFT project itself richer. Every other NFT mint you've ever participated in has it so that the primary market sales AND secondary market sales go into the founder wallet for completely mysterious reasons. Are they going to use those funds to grow the NFT project or buy a lambo for the founding team? This project is different, I just want to make the NFT project itself richer indefinitely and see where that goes. I don't pay myself anything of course, I&apos;m just in this for the fun and life XP.
                 </p>
               </div>
               <div className="space-y-4">
@@ -398,25 +398,25 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Tell me more about the Visarely team...</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                 It's really just me, broh. Al Luken. I'm just a regular dude and I love NFTs - been an avid collector and enthusiast for years - and this is my way of playing with NFTs in a way that I never have. Keep in mind, I have a full-time job so this is a hobby project for me! If you want to get involved, hit me up on X. I coded this entire project up, including smart contracts and website, in about 2 weeks.
+                 It&apos;s really just me, broh. Al Luken. I&apos;m just a regular dude and I love NFTs - been an avid collector and enthusiast for years - and this is my way of playing with NFTs in a way that I never have. Keep in mind, I have a full-time job so this is a hobby project for me! If you want to get involved, hit me up on X. I coded this entire project up, including smart contracts and website, in about 2 weeks.
                 </p>
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">What should I expect from Visarely Punks?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Tbh bruh, I don't know what to expect. The one thing you can be sure of is I have no interest in scamming you or anyone. I don't really stand to gain much by running this project except some life XP. And to have fun and meet awesome new people interested in playing cool onchain games with me.
+                  Tbh bruh, I don&apos;t know what to expect. The one thing you can be sure of is I have no interest in scamming you or anyone. I don&apos;t really stand to gain much by running this project except some life XP. And to have fun and meet awesome new people interested in playing cool onchain games with me.
                 </p>
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Is this risky?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  I would say so! Things can always go wrong in the Wild West of Web3. I've taken strenuous measures to ensure the safety of the treasury and the project but I can't anticipate everything. You'll notice the smart contract has a lot of checks and balances to ensure the safety of the treasury and the project, including functions specific to protecting funds in the Visarely treasury by withdrawing them in case of emergency. If I ever need to withdraw them, I would just airdrop the USDC back to all Visarely Punk holders. <b>Invest only what you can afford to lose.</b>
+                  I would say so! Things can always go wrong in the Wild West of Web3. I&apos;ve taken strenuous measures to ensure the safety of the treasury and the project but I can&apos;t anticipate everything. You&apos;ll notice the smart contract has a lot of checks and balances to ensure the safety of the treasury and the project, including functions specific to protecting funds in the Visarely treasury by withdrawing them in case of emergency. If I ever need to withdraw them, I would just airdrop the USDC back to all Visarely Punk holders. <b>Invest only what you can afford to lose.</b>
                 </p>
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Will there be exclusive groups for Visarely Punks holders?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Heck yeah! We'll set up an exclusive Telegram group exclusive to Visarely Punks holders.
+                  Heck yeah! We&apos;ll set up an exclusive Telegram group exclusive to Visarely Punks holders.
                 </p>
               </div>
               <div className="space-y-4">
@@ -452,13 +452,13 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">How long will it take to mint all 2000 Visarely Punks?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Who knows?! It might be that they mint out in a few days, or it might take a few months. Or never. And I'm fine with that. If it's meant to be, it will be. If not, this was a fun experiment.
+                  Who knows?! It might be that they mint out in a few days, or it might take a few months. Or never. And I&apos;m fine with that. If it&apos;s meant to be, it will be. If not, this was a fun experiment.
                 </p>
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Why Visarely?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  It sounds cool! Initially, the idea was to make the art a bit more grid-like and wave-patterned, where each NFT would have a ton of little Visarely Punks floating around in cool placements (replicating Victor Visarely's optical art). But they came out so cute and cool that I decided to make them PFPs.
+                  It sounds cool! Initially, the idea was to make the art a bit more grid-like and wave-patterned, where each NFT would have a ton of little Visarely Punks floating around in cool placements (replicating Victor Visarely&apos;s optical art). But they came out so cute and cool that I decided to make them PFPs.
                 </p>
               </div>
             </div>

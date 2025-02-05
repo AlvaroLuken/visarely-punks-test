@@ -28,7 +28,7 @@ import { base } from 'viem/chains'
 
 const customHttpTransport = http("/api/alchemy");
 
-export const publicClient = createPublicClient({
+const publicClient = createPublicClient({
   chain: base,
   transport: customHttpTransport,
 });

@@ -18,7 +18,7 @@ const MINT_PRICE = 500_000_000n // 500 USDC
 
 const customHttpTransport = http("/api/alchemy");
 
-export const publicClient = createPublicClient({
+const publicClient = createPublicClient({
   chain: base,
   transport: customHttpTransport,
 });

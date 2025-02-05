@@ -149,7 +149,7 @@ export default function Home() {
         {/* Stats Section - New */}
         <main className="container mx-auto px-4 py-12">
           <div className="bg-white/50 backdrop-blur-md rounded-2xl p-8 shadow-sm">
-            <div className="grid md:grid-cols-3 gap-8 text-center">
+            <div className="grid md:grid-cols-4 gap-8 text-center">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Supply</h3>
                 <p className="text-gray-800 text-lg mt-1">
@@ -184,6 +184,24 @@ export default function Home() {
                   />
                   <p className="text-gray-800 text-lg">500 USDC</p>
                 </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">View Collection</h3>
+                <a 
+                  href="https://opensea.io/collection/visarelypunks"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 mt-1 hover:opacity-80 transition-opacity"
+                >
+                  <Image 
+                    src="/opensea.svg"
+                    alt="OpenSea" 
+                    width={20} 
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                  <p className="text-gray-800 text-lg">OpenSea</p>
+                </a>
               </div>
             </div>
           </div>

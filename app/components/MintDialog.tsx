@@ -34,7 +34,7 @@ interface MintDialogProps {
 export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: MintDialogProps) {
   const { address } = useAccount()
   const [isOpen, setIsOpen] = useState(initialIsOpen)
-  const [error, setError] = useState<string>()
+  const [error] = useState<string>()
   const [tokenId, setTokenId] = useState<number>()
   const [svgData, setSvgData] = useState<string>()
   const [localAllowance, setLocalAllowance] = useState<bigint>(0n)

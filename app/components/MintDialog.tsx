@@ -219,9 +219,39 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
     }
   }
 
+  // Add USDC balance check
+  const { data: usdcBalance } = useContractRead({
+    address: USDC_ADDRESS,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: [address!],
+  })
+
+  // Update renderButton to include more informative balance message
   const renderButton = () => {
     if (!address) {
       return <Button disabled>Connect Wallet to Mint</Button>
+    }
+
+    if (usdcBalance && usdcBalance < MINT_PRICE) {
+      return (
+        <div className="space-y-2 text-center">
+          <Button disabled className="w-full">
+            Insufficient USDC Balance
+          </Button>
+          <p className="text-sm text-gray-600">
+            You need {Number(MINT_PRICE) / 1e6} USDC to mint. Current balance: {Number(usdcBalance) / 1e6} USDC
+          </p>
+          <a 
+            href="https://bridge.base.org/deposit" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-sm text-blue-600 hover:text-blue-800 underline block"
+          >
+            Bridge USDC to Base
+          </a>
+        </div>
+      )
     }
 
     if (isApproveLoading) {
@@ -252,7 +282,7 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
 
     return (
       <Button onClick={handleMint}>
-        Mint NFT
+        Mint NFT ({Number(MINT_PRICE) / 1e6} USDC)
       </Button>
     )
   }

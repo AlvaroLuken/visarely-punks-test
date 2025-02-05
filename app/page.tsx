@@ -25,6 +25,7 @@ import { RedeemSection } from './components/RedeemSection'
 import { createPublicClient, http } from 'viem'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from './lib/constants'
 import { base } from 'viem/chains'
+import { AdminPanel } from './components/AdminPanel'
 
 const customHttpTransport = http("/api/alchemy");
 
@@ -220,6 +221,7 @@ export default function Home() {
           </div>
         </main>
 
+        <AdminPanel />
         <Footer />
 
         <MintDialog 

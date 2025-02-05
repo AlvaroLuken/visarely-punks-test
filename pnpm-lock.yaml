@@ -6,6 +6,7 @@ specifiers:
   '@openzeppelin/contracts': ^5.2.0
   '@radix-ui/react-alert-dialog': ^1.1.5
   '@radix-ui/react-dialog': ^1.1.5
+  '@radix-ui/react-label': ^2.1.1
   '@radix-ui/react-slot': ^1.1.1
   '@radix-ui/react-tabs': ^1.1.2
   '@reown/walletkit': ^1.1.2
@@ -44,6 +45,7 @@ dependencies:
   '@openzeppelin/contracts': 5.2.0
   '@radix-ui/react-alert-dialog': 1.1.5_gtqhehb5qg2v5qbytyrukcpmiy
   '@radix-ui/react-dialog': 1.1.5_gtqhehb5qg2v5qbytyrukcpmiy
+  '@radix-ui/react-label': 2.1.1_gtqhehb5qg2v5qbytyrukcpmiy
   '@radix-ui/react-slot': 1.1.1_x25zuu6u7xhdvbznsywf7wxevq
   '@radix-ui/react-tabs': 1.1.2_gtqhehb5qg2v5qbytyrukcpmiy
   '@reown/walletkit': 1.1.2
@@ -1615,6 +1617,26 @@ packages:
       '@radix-ui/react-use-layout-effect': 1.1.0_x25zuu6u7xhdvbznsywf7wxevq
       '@types/react': 18.3.18
       react: 18.3.1
+    dev: false
+
+  /@radix-ui/react-label/2.1.1_gtqhehb5qg2v5qbytyrukcpmiy:
+    resolution: {integrity: sha512-UUw5E4e/2+4kFMH7+YxORXGWggtY6sM8WIwh5RZchhLuUg2H1hc98Py+pr8HMz6rdaYrK2t296ZEjYLOCO5uUw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@radix-ui/react-primitive': 2.0.1_gtqhehb5qg2v5qbytyrukcpmiy
+      '@types/react': 18.3.18
+      '@types/react-dom': 18.3.5_@types+react@18.3.18
+      react: 18.3.1
+      react-dom: 18.3.1_react@18.3.1
     dev: false
 
   /@radix-ui/react-portal/1.1.3_gtqhehb5qg2v5qbytyrukcpmiy:

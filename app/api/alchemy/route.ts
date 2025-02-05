@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+    if (!process.env.ALCHEMY_API_KEY) {
+        return NextResponse.json({ error: "Alchemy API key not configured" }, { status: 500 });
+    }
+
     const body = await request.json();
     
     const jsonRpcRequest = {

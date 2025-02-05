@@ -21,6 +21,26 @@ export const metadata: Metadata = {
     icon: '/icon.png',
     apple: '/icon.png',
   },
+  openGraph: {
+    title: 'Visarely Punks',
+    description: 'A generative art collection merging Vasarely with CryptoPunks',
+    images: [
+      {
+        url: '/preview1.svg',
+        width: 1200,
+        height: 630,
+        alt: 'Visarely Punks Preview',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Visarely Punks',
+    description: 'A generative art collection merging Vasarely with CryptoPunks',
+    images: ['/og-image.jpg'],
+    creator: '@lifeofbitcoin',
+  },
 };
 
 export default function RootLayout({

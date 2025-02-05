@@ -27,3 +27,5 @@ export const AAVE_POOL_ADDRESS = process.env.NEXT_PUBLIC_AAVE_POOL_ADDRESS as `0
 export const TREASURY_ADDRESS = process.env.NEXT_PUBLIC_TREASURY_ADDRESS as `0x${string}`
 export const AUSDC_ADDRESS = process.env.NEXT_PUBLIC_AUSDC_ADDRESS as `0x${string}` 
 export const USDC_ADDRESS = process.env.NEXT_PUBLIC_USDC_ADDRESS as `0x${string}`
+
+export { CONTRACT_ADDRESS, CONTRACT_ABI } from './contract'

@@ -22,6 +22,16 @@ import { Footer } from "./components/Footer"
 import baseNetworkLogo from './images/brands/Base_Network_Logo.svg'
 import usdcLogo from './images/brands/usdc_icon.png'
 import { RedeemSection } from './components/RedeemSection'
+import { createPublicClient, http } from 'viem'
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from './lib/constants'
+import { sepolia } from 'viem/chains'
+
+const customHttpTransport = http("/api/alchemy");
+
+export const publicClient = createPublicClient({
+  chain: sepolia,
+  transport: customHttpTransport,
+});
 
 export default function Home() {
   const [currentPreviewIndex, setCurrentPreviewIndex] = useState(0)
@@ -29,6 +39,7 @@ export default function Home() {
   const [lastMintedId, setLastMintedId] = useState<number>()
   const [viewingMint, setViewingMint] = useState(false)
   const [showReloadAlert, setShowReloadAlert] = useState(false)
+  const [totalMinted, setTotalMinted] = useState<number>(0)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -38,6 +49,25 @@ export default function Home() {
     }, 3000)
 
     return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const fetchTotalMinted = async () => {
+      try {
+        const total = await publicClient.readContract({
+          address: CONTRACT_ADDRESS,
+          abi: CONTRACT_ABI,
+          functionName: 'totalMinted',
+        })
+        setTotalMinted(Number(total))
+      } catch (error) {
+        console.error('Error fetching total minted:', error)
+      }
+    }
+
+    fetchTotalMinted()
+    const interval = setInterval(fetchTotalMinted, 10000) // Refresh every 10s
+    return () => clearInterval(interval)
   }, [])
 
   const handleMintSuccess = (tokenId: number) => {
@@ -63,7 +93,7 @@ export default function Home() {
                   Visarely Punks
                 </h1>
                 <p className="text-gray-800 text-lg mb-0 leading-relaxed">
-                  A generative art collection where every piece is fully on-chain and deterministically generated from your wallet address and token ID. Each unique composition merges Victor Vasarely's optical art mastery with CryptoPunks' iconic aesthetic, featuring mathematically-derived wave patterns.
+                  A generative art collection where every piece is fully on-chain and deterministically generated from your wallet address and token ID. Each unique composition merges Victor Vasarely&apos;s optical art mastery with CryptoPunks&apos; iconic aesthetic, featuring mathematically-derived wave patterns.
                 </p>
               </div>
             </div>
@@ -119,10 +149,15 @@ export default function Home() {
         {/* Stats Section - New */}
         <main className="container mx-auto px-4 py-12">
           <div className="bg-white/50 backdrop-blur-md rounded-2xl p-8 shadow-sm">
-            <div className="grid md:grid-cols-4 gap-8 text-center">
+            <div className="grid md:grid-cols-3 gap-8 text-center">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Supply</h3>
-                <p className="text-gray-800 text-lg mt-1">2000</p>
+                <p className="text-gray-800 text-lg mt-1">
+                  {totalMinted} / 2000 Minted
+                </p>
+                <p className="text-gray-600 text-sm mt-1">
+                  {2000 - totalMinted} Remaining
+                </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Blockchain</h3>
@@ -149,10 +184,6 @@ export default function Home() {
                   />
                   <p className="text-gray-800 text-lg">500 USDC</p>
                 </div>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900">Traits</h3>
-                <p className="text-gray-800 text-lg mt-1">8-24 Characters</p>
               </div>
             </div>
           </div>

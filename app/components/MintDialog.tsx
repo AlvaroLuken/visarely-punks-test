@@ -5,7 +5,7 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt, useContract
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
-import { createPublicClient, http, erc20Abi } from 'viem'
+import { createPublicClient, http, Transport, type PublicClient, erc20Abi } from 'viem'
 import { sepolia } from 'viem/chains'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract'
 
@@ -15,10 +15,13 @@ if (!USDC_ADDRESS) {
 }
 
 const MINT_PRICE = 1_000_000n // 1 USDC for testnet
-const publicClient = createPublicClient({
+
+const customHttpTransport = http("/api/alchemy");
+
+export const publicClient = createPublicClient({
   chain: sepolia,
-  transport: http(`https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`)
-})
+  transport: customHttpTransport,
+});
 
 interface MintDialogProps {
   isOpen: boolean
@@ -225,11 +228,13 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
 
   return (
     <Dialog 
-      // Use forceOpen to keep dialog open
       open={forceOpen || isOpen}
       onOpenChange={(open) => {
-        // Only allow closing by clicking outside after mint success
-        if (!open && isMintSuccess) {
+        // Allow closing if:
+        // 1. No wallet connected
+        // 2. Not in middle of transaction
+        // 3. After mint success
+        if (!open && (!address || (!isMintLoading && !isApproveLoading) || isMintSuccess)) {
           setForceOpen(false)
           onClose()
         }
@@ -237,9 +242,15 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
     >
       <DialogContent 
         className="sm:max-w-[600px]"
-        onEscapeKeyDown={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => {
+          // Only prevent escape if we're in the middle of minting or approving
+          if (isMintLoading || isApproveLoading) {
+            e.preventDefault()
+          }
+        }}
         onPointerDownOutside={(e) => {
-          if (!isMintSuccess) {
+          // Only prevent clicking outside if we're in the middle of minting or approving
+          if (isMintLoading || isApproveLoading) {
             e.preventDefault()
           }
         }}

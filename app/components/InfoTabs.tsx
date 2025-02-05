@@ -6,10 +6,12 @@ import { createPublicClient, http, formatUnits } from 'viem'
 import { sepolia } from 'viem/chains'
 import { AAVE_POOL_ADDRESS, TREASURY_ADDRESS, AUSDC_ADDRESS, USDC_ADDRESS } from '../lib/constants'
 
-const publicClient = createPublicClient({
+const customHttpTransport = http("/api/alchemy");
+
+export const publicClient = createPublicClient({
   chain: sepolia,
-  transport: http(`https://eth-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`)
-})
+  transport: customHttpTransport,
+});
 
 // Update the ABI to include getReserveData
 const AAVE_POOL_ABI = [
@@ -192,7 +194,7 @@ export function InfoTabs() {
                       <h4 className="text-lg font-semibold text-gray-900">Phase 2</h4>
                     </div>
                     <p className="text-gray-800 text-lg leading-relaxed">
-                      Collection fully minted (2000 NFTs) and the treasury is fully funded with 1 million USDC. Redemptions are closed.
+                      Collection fully minted (2000 NFTs) and the treasury is fully funded with 1 million USDC. Redemptions are closed. Treasury is fully owned by the Visarely team.
                     </p>
                   </div>
                   <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden md:block">
@@ -223,20 +225,34 @@ export function InfoTabs() {
               <ul className="text-gray-800 text-lg leading-relaxed list-disc pl-6">
                 <li>Visarely Punks is a collection of NFTs with a total supply of 2000.</li>
                 <li>100% of mint proceeds are allocated to the Visarely Treasury. The treasury is intially fully owned by the Visarely team, with the intention to move to a DAO-based governance structure.</li>
-                <li>2.5% of secondary market sales go directly to the Visarely Treasury (as long as suggested royalties are respected).</li>
+                <li>2.5% of all secondary market sales go directly to the Visarely Treasury (as long as royalties are respected).</li>
+                <li>All USDC is immediately supplied to Aave v3, earning yield for the DAO treasury.</li>
+                <li>The goal is to make the Visarely Treasury RICH!</li>
               </ul>
               <div className="grid md:grid-cols-3 gap-8 mt-8">
                 <div className="text-center p-6 rounded-lg bg-gray-50/80 backdrop-blur-sm">
                   <h4 className="font-semibold text-gray-900 mb-2">Distribution</h4>
-                  <p className="text-gray-800 text-lg">2000 NFTs are for sale at 500 USDC each. The collection is fully "official" when 2000 NFTs are minted, otherwise holders can get a refund on their NFT (minus a 10% tax, which is kept by the Visarely Treasury).</p>
+                  <p className="text-gray-800 text-lg space-y-4">
+                    <span className="block">2000 NFTs are for sale at 500 USDC each.</span>
+                    <span className="block">Until all 2000 NFTs are minted, the collection will be considered "pre-launch" and holders can get a refund on their NFT (minus a 10% tax, which is kept by the Visarely Treasury).</span>
+                  </p>
                 </div>
                 <div className="text-center p-6 rounded-lg bg-gray-50/80 backdrop-blur-sm">
                   <h4 className="font-semibold text-gray-900 mb-2">Utility</h4>
-                  <p className="text-gray-800 text-lg">No real utility. The collection is purely for aesthetic and community-building purposes. The goal is to have fun and increase the wealth of the Visarely Treasury. A primary goal is to protect the 500 USDC principal and only take on investment opportunities that will increase the treasury value (and hence increase the value of a Visarely Punk beyond 500 USDC).</p>
+                  <p className="text-gray-800 text-lg">
+                    No real utility. The collection is purely for aesthetic and community-building purposes.<br /><br />
+                    The goal is to have fun and increase the value and wealth of the Visarely Treasury.<br /><br />
+                    Each NFT is worth 500 USDC and a main goal of this project is to preserve that value indefinitely. 1/2000th of the treasury should always be worth at least 500 USDC. The treasury will take on investment opportunities that will increase the treasury value; and hence increase the value of a Visarely Punk beyond 500 USDC 🚀.
+                  </p>
                 </div>
                 <div className="text-center p-6 rounded-lg bg-gray-50/80 backdrop-blur-sm">
                   <h4 className="font-semibold text-gray-900 mb-2">Vision</h4>
-                  <p className="text-gray-800 text-lg">High school investment club vibes! With the treasury fully funded (1 million USDC!), investment opportunities open up beyond what one individual could participate in with 500 USDC. These opportunities can be: buying a CryptoPunk for 100k USDC, buying a 100k USDC position in a DeFi protocol, or other opportunities that are too expensive for one individual to participate in. The yields and profits go to the treasury, which is used to further fund investment opportunities. Owning a Visarely Punk means owning 1/2000th of the treasury.</p>
+                  <p className="text-gray-800 text-lg">
+                    High school investment club vibes! With the treasury fully funded (1 million USDC!), investment opportunities open up beyond what one individual could participate in with 500 USDC.<br /><br />
+                    These opportunities can be: buying a CryptoPunk for 100k USDC, buying a 100k USDC position in a DeFi protocol, or other opportunities that are too expensive for one individual to participate in.<br /><br />
+                    The yields and profits go to the treasury, which is used to further fund investment opportunities. Owning a Visarely Punk means owning 1/2000th of the treasury.<br /><br />
+                    The team also wants to create Visarely Punk merchandise and swag exclusive to Visarely Punks holders. 👀
+                  </p>
                 </div>
               </div>
             </div>
@@ -346,25 +362,103 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">What is Visarely Punks?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Sample answer explaining the project in detail.
+                  Visarely Punks is a collection of 2000 unique NFTs, each generated on-chain using advanced SVG manipulation. The minter&apos;s address influences the final composition, ensuring true randomness and uniqueness.
                 </p>
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">How do I mint an NFT?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Sample answer explaining the minting process.
+                  You must have 500 USDC in your wallet to mint an NFT. To mint an NFT, connect your wallet to the Visarely Punks website, select the Mint NFT button, and confirm the transaction. The minting process is near-instant and the NFT will be added to your wallet.
                 </p>
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">What makes each NFT unique?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Sample answer explaining the uniqueness factors.
+                  Each NFT is generated on-chain using advanced SVG manipulation. The minter&apos;s address influences the final composition, ensuring true randomness and uniqueness. The final NFT could be a simple (but beautiful) geometric pattern, an alien with a top hat, or a combination of both. The combinations are endless!
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">What do you mean all mint proceeds are deposited into Aave?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  In order to immediately increase the treasury value, all mint proceeds are deposited into Aave v3 on Base. Aave FTW!!!! Onchain yield babyyyyy! What other NFT project focuses on immediately increasing the treasury value huh?!?!
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">How is this project different from other NFT projects?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  Well, for one, the primary sales are immediately deposited into Aave v3 on Base to immediately start making the NFT project itself richer. Every other NFT mint you've ever participated in has it so that the primary market sales AND secondary market sales go into the founder wallet for completely mysterious reasons. Are they going to use those funds to grow the NFT project or buy a lambo for the founding team? This project is different, I just want to make the NFT project itself richer indefinitely and see where that goes. I don't pay myself anything of course, I'm just in this for the fun and life XP.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">As a Visarely Punk holder, what do I get?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  Initially, you just get a beautiful and unique NFT (you should set it as your profile picture on X!). The goal is to move to a DAO-based governance where each NFT can vote 1:1 on what to do with the treasury. The more Visarely Punks one owns, the more power they have in the DAO. Initially, the Visarely team has full control of the treasury to ensure a smooth and secure transition to DAO-based governance. Don't worry, the goal is to make the treasury rich indefinitely, whoever owns it. The founder team is fully doxed and has ZERO interest in rug pulling.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Tell me more about the Visarely team...</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                 It's really just me, broh. Al Luken. I'm just a regular dude and I love NFTs - been an avid collector and enthusiast for years - and this is my way of playing with NFTs in a way that I never have. Keep in mind, I have a full-time job so this is a hobby project for me! If you want to get involved, hit me up on X. I coded this entire project up, including smart contracts and website, in about 2 weeks.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">What should I expect from Visarely Punks?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  Tbh bruh, I don't know what to expect. The one thing you can be sure of is I have no interest in scamming you or anyone. I don't really stand to gain much by running this project except some life XP. And to have fun and meet awesome new people interested in playing cool onchain games with me.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Is this risky?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  I would say so! Things can always go wrong in the Wild West of Web3. I've taken strenuous measures to ensure the safety of the treasury and the project but I can't anticipate everything. You'll notice the smart contract has a lot of checks and balances to ensure the safety of the treasury and the project, including functions specific to protecting funds in the Visarely treasury by withdrawing them in case of emergency. If I ever need to withdraw them, I would just airdrop the USDC back to all Visarely Punk holders. <b>Invest only what you can afford to lose.</b>
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Will there be exclusive groups for Visarely Punks holders?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  Heck yeah! We'll set up an exclusive Telegram group exclusive to Visarely Punks holders.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Will there be exclusive merch for Visarely Punks holders?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  Yes. This is Al Luken typing this: one thing I always hated about NFT projects is that I would pay these crazy amounts of money for the NFT and never even see some swag?!?! Bro, some cheap cotton hoodies cost like $20 to make. When the time is right, a snapshot will be taken and Visarely Punk holders will be able to redeem some swag.
                 </p>
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">What blockchain is this on?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Sample answer about the blockchain technology used.
+                  This is on Base.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">What do you mean I can get a refund on my NFT?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  If you mint an NFT and the collection is not fully minted, you can get a refund on your NFT (minus a 10% tax, which is kept by the Visarely Treasury).
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">How do I get a refund on my Visarely Punk?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  You must own a Visarely Punk and the collection must not yet be fully minted. Simply reload the page and the Redeem Your Visarely Punk section will appear. Select the NFT you want to redeem and confirm the transaction. You will get 450 USDC back to your wallet.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Are the smart contracts verified?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  Yep.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">How long will it take to mint all 2000 Visarely Punks?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  Who knows?! It might be that they mint out in a few days, or it might take a few months. Or never. And I'm fine with that. If it's meant to be, it will be. If not, this was a fun experiment.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Why Visarely?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  It sounds cool! Initially, the idea was to make the art a bit more grid-like and wave-patterned, where each NFT would have a ton of little Visarely Punks floating around in cool placements (replicating Victor Visarely's optical art). But they came out so cute and cool that I decided to make them PFPs.
                 </p>
               </div>
             </div>

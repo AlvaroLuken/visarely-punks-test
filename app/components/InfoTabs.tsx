@@ -466,7 +466,7 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Can I still get 450 USDC back on my NFT AFTER the collection is fully minted?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Nope! The refund is only available if the collection is not fully minted. When the treasury becomes DAO-owned, nothing stops you from submitting a proposal, for the DAO's approval, to refund your NFT for 450 USDC though. 🤷‍♂️
+                  Nope! The refund is only available if the collection is not fully minted. When the treasury becomes DAO-owned, nothing stops you from submitting a proposal, for the DAO&apos;s approval, to refund your NFT for 450 USDC though. 🤷‍♂️
                 </p>
               </div>
             </div>

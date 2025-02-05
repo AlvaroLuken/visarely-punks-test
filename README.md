@@ -43,24 +43,26 @@ npm install
 forge install
 ```
 
-4. Create a `.env` file:
+4. Set up environment variables:
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` with your configuration:
 ```env
-# RPC URLs
+# Required for deployment
+RPC_URL=                   # Your Base RPC URL
+ETHERSCAN_API_KEY=        # Your Basescan API key
+PRIVATE_KEY=              # Your wallet private key
+
+# Frontend environment variables
 BASE_RPC_URL=
 ALCHEMY_API_KEY=
-
-# Deployment
-PRIVATE_KEY=
-ETHERSCAN_API_KEY=
-
-# Contract Addresses
 NEXT_PUBLIC_CONTRACT_ADDRESS=
 NEXT_PUBLIC_USDC_ADDRESS=
 NEXT_PUBLIC_AUSDC_ADDRESS=
 NEXT_PUBLIC_AAVE_POOL_ADDRESS=
 NEXT_PUBLIC_TREASURY_ADDRESS=
-
-# Web3
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=
 ```
 
@@ -90,12 +92,26 @@ npm test
 
 ### Contract Deployment
 
-Using Hardhat:
+The project supports multiple deployment methods:
+
+#### Using Makefile (Recommended)
+
+Check deployment configuration:
+```bash
+make check_visarely
+```
+
+Deploy contracts:
+```bash
+make deploy_visarely
+```
+
+#### Using Hardhat:
 ```bash
 npm run deploy
 ```
 
-Using Foundry:
+#### Using Foundry directly:
 ```bash
 npm run deploy:foundry
 ```
@@ -110,6 +126,21 @@ contracts/
 ├── VisarelyGovernor.sol    # DAO governance
 └── SVGUtils.sol           # SVG generation utilities
 ```
+
+### Deployment Script
+
+The deployment script (`script/Deploy.s.sol`) handles the following:
+
+1. Deploys VisarelyTreasury with USDC and Aave Pool integration
+2. Deploys VisarelyRenderer for on-chain SVG generation
+3. Deploys VisarelyPunks main contract
+4. Sets up TimelockController for DAO governance
+5. Logs all deployed contract addresses
+
+Key configuration constants:
+- Timelock Delay: 2 days
+- USDC Address on Base: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`
+- Aave Pool on Base: `0xA238Dd80C259a72e81d7e4664a9801593F98d1c5`
 
 ## Testing
 

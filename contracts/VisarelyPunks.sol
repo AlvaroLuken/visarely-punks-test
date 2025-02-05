@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/interfaces/IERC2981.sol";
-import { VisarelyTreasury } from "./VisarelyTreasury.sol";
-import { VisarelyRenderer } from "./VisarelyRenderer.sol";
+import {VisarelyTreasury} from "./VisarelyTreasury.sol";
+import {VisarelyRenderer} from "./VisarelyRenderer.sol";
 
 contract VisarelyPunks is ERC721, ReentrancyGuard, IERC2981 {
     using EnumerableSet for EnumerableSet.UintSet;
@@ -23,14 +23,14 @@ contract VisarelyPunks is ERC721, ReentrancyGuard, IERC2981 {
     IERC20 public immutable aToken;
     VisarelyTreasury public immutable treasury;
     VisarelyRenderer public immutable renderer;
-    
+
     // Core state
     address public founder;
     bool public founderControlActive;
     bool public dissolved;
     uint256 public mintPrice;
     uint256 public maxSupply;
-    
+
     // Tracking
     uint256 public totalMinted;
     uint256 public totalBurned;
@@ -48,25 +48,20 @@ contract VisarelyPunks is ERC721, ReentrancyGuard, IERC2981 {
         _;
     }
 
-    constructor(
-        address _usdc, 
-        address _treasury,
-        address _renderer,
-        address _aToken
-    ) ERC721("VisarelyPunks", "VISA") {
+    constructor(address _usdc, address _treasury, address _renderer, address _aToken) ERC721("VisarelyPunks", "VISA") {
         USDC = IERC20(_usdc);
         aToken = IERC20(_aToken);
         treasury = VisarelyTreasury(payable(_treasury));
         renderer = VisarelyRenderer(_renderer);
 
         if (block.chainid == 84532 || block.chainid == 11155111) {
-            mintPrice = 1 * 10**6; // 1 USDC for testnet
+            mintPrice = 1 * 10 ** 6; // 1 USDC for testnet
             maxSupply = 20;
         } else {
-            mintPrice = 500 * 10**6; // 500 USDC for mainnet
+            mintPrice = 500 * 10 ** 6; // 500 USDC for mainnet
             maxSupply = 2000;
         }
-        
+
         founder = msg.sender;
         founderControlActive = true;
 
@@ -83,29 +78,21 @@ contract VisarelyPunks is ERC721, ReentrancyGuard, IERC2981 {
         return (address(treasury), (salePrice * ROYALTY_FEE) / 10000);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(ERC721, IERC165)
-        returns (bool)
-    {
-        return
-            interfaceId == type(IERC2981).interfaceId ||
-            super.supportsInterface(interfaceId);
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, IERC165) returns (bool) {
+        return interfaceId == type(IERC2981).interfaceId || super.supportsInterface(interfaceId);
     }
 
     function mint() external nonReentrant {
         require(totalSupply() < maxSupply, "Max supply reached");
         require(!dissolved, "Contract dissolved");
-        
+
         USDC.safeTransferFrom(msg.sender, address(treasury), mintPrice);
         treasury.deposit(mintPrice);
 
         uint256 tokenId = ++totalMinted;
         _safeMint(msg.sender, tokenId);
         tokenMinters[tokenId] = msg.sender;
-        
+
         emit NFTMinted(msg.sender, tokenId);
     }
 
@@ -120,11 +107,11 @@ contract VisarelyPunks is ERC721, ReentrancyGuard, IERC2981 {
 
         // Withdraw redemption amount to user, tax stays in treasury
         treasury.withdraw(msg.sender, redemptionAmount);
-        
+
         _burn(tokenId);
         _burned[tokenId] = true;
         totalBurned++;
-        
+
         emit NFTRedeemed(msg.sender, tokenId);
     }
 
@@ -146,21 +133,17 @@ contract VisarelyPunks is ERC721, ReentrancyGuard, IERC2981 {
     }
 
     function executeStrategy(address target, bytes calldata data) external {
-        require(
-            (msg.sender == founder && founderControlActive) || 
-            msg.sender == treasury.owner(), 
-            "Not authorized"
-        );
+        require((msg.sender == founder && founderControlActive) || msg.sender == treasury.owner(), "Not authorized");
         treasury.executeStrategy(target, data);
     }
-    
+
     function surrenderFounderControl(address governor) external onlyFounder {
         require(founderControlActive, "Already surrendered");
         founderControlActive = false;
         treasury.transferOwnership(governor);
         emit FounderControlSurrendered(block.timestamp);
     }
-    
+
     function dissolveDAO() external onlyFounder {
         require(!dissolved, "Already dissolved");
         dissolved = true;
@@ -246,24 +229,20 @@ contract VisarelyPunks is ERC721, ReentrancyGuard, IERC2981 {
     function _exists(uint256 tokenId) internal view returns (bool) {
         return !_burned[tokenId] && tokenId <= totalMinted;
     }
-    
+
     function _burnPunk(uint256 tokenId) internal {
         _burn(tokenId);
         _burned[tokenId] = true;
         totalBurned++;
     }
-    
-    function _update(
-        address to,
-        uint256 tokenId,
-        address auth
-    ) internal override returns (address) {
+
+    function _update(address to, uint256 tokenId, address auth) internal override returns (address) {
         address from = super._update(to, tokenId, auth);
         if (from != address(0)) tokensOwned[from].remove(tokenId);
         if (to != address(0)) tokensOwned[to].add(tokenId);
         return from;
     }
-    
+
     function totalSupply() public view returns (uint256) {
         return totalMinted - totalBurned;
     }

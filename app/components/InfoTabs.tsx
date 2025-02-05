@@ -224,6 +224,7 @@ export function InfoTabs() {
               <h3 className="text-xl font-semibold text-gray-900">Tokenomics</h3>
               <ul className="text-gray-800 text-lg leading-relaxed list-disc pl-6">
                 <li>Visarely Punks is a collection of NFTs with a total supply of 2000.</li>
+                <li>Until all 2000 NFTs are minted, the collection will be considered &quot;pre-launch&quot; and holders can get a refund on their NFT (minus a 10% tax, which is kept by the Visarely Treasury).</li>
                 <li>100% of mint proceeds are allocated to the Visarely Treasury. The treasury is intially fully owned by the Visarely team, with the intention to move to a DAO-based governance structure.</li>
                 <li>2.5% of all secondary market sales go directly to the Visarely Treasury (as long as royalties are respected).</li>
                 <li>All USDC is immediately supplied to Aave v3, earning yield for the DAO treasury.</li>

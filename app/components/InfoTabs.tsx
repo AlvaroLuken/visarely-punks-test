@@ -448,7 +448,7 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">Are the smart contracts verified?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Yep.
+                  Yep. You can view the contracts on BaseScan. VisarelyPunks NFT contract: <a href="https://basescan.org/address/0xd183659D1f99871247Eb2F45D00e35fd9842AeBc" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">https://basescan.org/address/0xd183659D1f99871247Eb2F45D00e35fd9842AeBc</a> and Visarely Treasury contract: <a href="https://basescan.org/address/0x31983e242C375bbf1E910068670464E70b985708" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">https://basescan.org/address/0x31983e242C375bbf1E910068670464E70b985708</a>.
                 </p>
               </div>
               <div className="space-y-4">
@@ -461,6 +461,12 @@ export function InfoTabs() {
                 <h3 className="text-lg font-semibold text-gray-900">Why Visarely?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
                   It sounds cool! Initially, the idea was to make the art a bit more grid-like and wave-patterned, where each NFT would have a ton of little Visarely Punks floating around in cool placements (replicating Victor Visarely&apos;s optical art). But they came out so cute and cool that I decided to make them PFPs.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">I minted a Visarely Punk and I don&apos;t like it.</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  Bummer! You can get a refund on your NFT (minus a 10% tax, which is kept by the Visarely Treasury). Just reload the page and the Redeem Your Punk section will appear. Select the NFT you want to redeem and confirm the transaction. You will get 450 USDC back to your wallet.
                 </p>
               </div>
               <div className="space-y-4">

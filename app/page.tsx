@@ -63,7 +63,7 @@ export default function Home() {
                   Visarely Punks
                 </h1>
                 <p className="text-gray-800 text-lg mb-0 leading-relaxed">
-                  A generative art collection merging Victor Vasarely&apos;s optical art mastery with CryptoPunks&apos; iconic aesthetic. Each piece features mathematically-derived wave patterns hosting unique punk characters with varying traits. From rare 8-piece grids to dense 24-character compositions, every mint produces distinct arrangements determined by the minter&apos;s address.
+                  A generative art collection where every piece is fully on-chain and deterministically generated from your wallet address and token ID. Each unique composition merges Victor Vasarely's optical art mastery with CryptoPunks' iconic aesthetic, featuring mathematically-derived wave patterns.
                 </p>
               </div>
             </div>

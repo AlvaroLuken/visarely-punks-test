@@ -175,7 +175,7 @@ export function InfoTabs() {
                       <h4 className="text-lg font-semibold text-gray-900">Phase 1</h4>
                     </div>
                     <p className="text-gray-800 text-lg leading-relaxed">
-                      Initial mint phase with open redemptions. Each NFT can be redeemed for its proportional share of the treasury.
+                      Initial mint phase with open redemptions. Until the full 2000 NFT supply is minted, NFT owners can get a refund on their NFT (minus a 10% tax, which is kept by the Visarely Treasury).
                     </p>
                   </div>
                   <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden md:block">
@@ -192,7 +192,7 @@ export function InfoTabs() {
                       <h4 className="text-lg font-semibold text-gray-900">Phase 2</h4>
                     </div>
                     <p className="text-gray-800 text-lg leading-relaxed">
-                      Collection fully minted (2000 NFTs). DAO initiated for collective treasury management and governance.
+                      Collection fully minted (2000 NFTs) and the treasury is fully funded with 1 million USDC. Redemptions are closed.
                     </p>
                   </div>
                   <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden md:block">
@@ -209,7 +209,7 @@ export function InfoTabs() {
                       <h4 className="text-lg font-semibold text-gray-900">Phase 3</h4>
                     </div>
                     <p className="text-gray-800 text-lg leading-relaxed">
-                      Community-driven initiatives and expansion. New features and opportunities voted by DAO members.
+                      The Visarely Treasury moves to a DAO-based governance structure. Community-driven initiatives and expansion. New features and opportunities voted by DAO members.
                     </p>
                   </div>
                 </div>
@@ -220,21 +220,23 @@ export function InfoTabs() {
           <TabsContent value="tokenomics" className="mt-0 w-full">
             <div className="space-y-6">
               <h3 className="text-xl font-semibold text-gray-900">Tokenomics</h3>
-              <p className="text-gray-800 text-lg leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              </p>
+              <ul className="text-gray-800 text-lg leading-relaxed list-disc pl-6">
+                <li>Visarely Punks is a collection of NFTs with a total supply of 2000.</li>
+                <li>100% of mint proceeds are allocated to the Visarely Treasury. The treasury is intially fully owned by the Visarely team, with the intention to move to a DAO-based governance structure.</li>
+                <li>2.5% of secondary market sales go directly to the Visarely Treasury (as long as suggested royalties are respected).</li>
+              </ul>
               <div className="grid md:grid-cols-3 gap-8 mt-8">
                 <div className="text-center p-6 rounded-lg bg-gray-50/80 backdrop-blur-sm">
                   <h4 className="font-semibold text-gray-900 mb-2">Distribution</h4>
-                  <p className="text-gray-800 text-lg">Sample distribution metrics</p>
+                  <p className="text-gray-800 text-lg">2000 NFTs are for sale at 500 USDC each. The collection is fully "official" when 2000 NFTs are minted, otherwise holders can get a refund on their NFT (minus a 10% tax, which is kept by the Visarely Treasury).</p>
                 </div>
                 <div className="text-center p-6 rounded-lg bg-gray-50/80 backdrop-blur-sm">
                   <h4 className="font-semibold text-gray-900 mb-2">Utility</h4>
-                  <p className="text-gray-800 text-lg">Sample utility description</p>
+                  <p className="text-gray-800 text-lg">No real utility. The collection is purely for aesthetic and community-building purposes. The goal is to have fun and increase the wealth of the Visarely Treasury. A primary goal is to protect the 500 USDC principal and only take on investment opportunities that will increase the treasury value (and hence increase the value of a Visarely Punk beyond 500 USDC).</p>
                 </div>
                 <div className="text-center p-6 rounded-lg bg-gray-50/80 backdrop-blur-sm">
-                  <h4 className="font-semibold text-gray-900 mb-2">Vesting</h4>
-                  <p className="text-gray-800 text-lg">Sample vesting schedule</p>
+                  <h4 className="font-semibold text-gray-900 mb-2">Vision</h4>
+                  <p className="text-gray-800 text-lg">High school investment club vibes! With the treasury fully funded (1 million USDC!), investment opportunities open up beyond what one individual could participate in with 500 USDC. These opportunities can be: buying a CryptoPunk for 100k USDC, buying a 100k USDC position in a DeFi protocol, or other opportunities that are too expensive for one individual to participate in. The yields and profits go to the treasury, which is used to further fund investment opportunities. Owning a Visarely Punk means owning 1/2000th of the treasury.</p>
                 </div>
               </div>
             </div>
@@ -281,18 +283,32 @@ export function InfoTabs() {
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center space-y-4">
                 <div className="w-40 h-40 mx-auto rounded-full overflow-hidden bg-gray-100">
-                  {/* Replace with actual image */}
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
-                    Photo
-                  </div>
+                  <img
+                    src="/images/alvaro_luken_head_shot.jpg"
+                    alt="Al Luken"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">John Doe</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">Al Luken</h3>
                   <p className="text-gray-800 text-lg leading-relaxed">Founder & Developer</p>
                 </div>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Brief bio or description about the team member and their role in the project.
+                  Al is crypto class of 2017. He lives and breathes NFTs. He is the main tinkerer behind Visarely Punks and just wants to have fun! The vision is: onchain investment club.
                 </p>
+                <div className="flex items-center justify-center gap-2 mt-2">
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  <a 
+                    href="https://x.com/lifeofbitcoin" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-gray-800 hover:text-blue-600 transition-colors"
+                  >
+                    Follow @lifeofbitcoin
+                  </a>
+                </div>
               </div>
               <div className="text-center space-y-4">
                 <div className="w-40 h-40 mx-auto rounded-full overflow-hidden bg-gray-100">

@@ -109,16 +109,18 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
 
   // Handle NFT mint
   const handleMint = async () => {
+    console.log('Starting mint process...')
+    
     try {
-      console.log('Minting NFT...')
       await writeMint({
         address: CONTRACT_ADDRESS,
         abi: CONTRACT_ABI,
         functionName: 'mint',
+        args: []
       })
-    } catch (e) {
-      console.error('Mint error:', e)
-      setError(e instanceof Error ? e.message : 'Failed to mint')
+      console.log('Mint transaction sent:', mintHash)
+    } catch (error) {
+      console.error('Error minting:', error)
     }
   }
 
@@ -163,7 +165,7 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
     }
   }
 
-  // Monitor mint success
+  // Monitor mint status
   useEffect(() => {
     if (isMintSuccess && mintHash) {
       console.log('Mint successful, getting transaction receipt...')
@@ -181,7 +183,6 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
           console.log('New token ID:', newTokenId)
           setTokenId(newTokenId)
           await fetchNFTData(newTokenId)
-          // Call onMintSuccess but don't close the dialog
           onMintSuccess(newTokenId)
         })
         .catch(console.error)

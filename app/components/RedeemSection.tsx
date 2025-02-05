@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useContractRead } from 'wagmi'
 import { createPublicClient, http } from 'viem'
-import { sepolia } from 'viem/chains'
+import { base } from 'viem/chains'
 import { Button } from "@/components/ui/button"
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract'
 import { Loader2 } from "lucide-react"
@@ -41,7 +41,7 @@ export function RedeemSection() {
 
       try {
         const publicClient = createPublicClient({
-          chain: sepolia,
+          chain: base,
           transport: http()
         })
 

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server'
 import { createPublicClient, http } from 'viem'
-import { baseSepolia } from 'viem/chains'
+import { base } from 'viem/chains'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '@/lib/contract'
 
 const client = createPublicClient({
-  chain: baseSepolia,
+  chain: base,
   transport: http()
 })
 

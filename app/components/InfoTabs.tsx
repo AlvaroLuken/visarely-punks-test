@@ -3,13 +3,13 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useState, useEffect } from 'react'
 import { createPublicClient, http, formatUnits } from 'viem'
-import { sepolia } from 'viem/chains'
+import { base } from 'viem/chains'
 import { AAVE_POOL_ADDRESS, TREASURY_ADDRESS, AUSDC_ADDRESS, USDC_ADDRESS } from '../lib/constants'
 
 const customHttpTransport = http("/api/alchemy");
 
 export const publicClient = createPublicClient({
-  chain: sepolia,
+  chain: base,
   transport: customHttpTransport,
 });
 
@@ -328,16 +328,18 @@ export function InfoTabs() {
               </div>
               <div className="text-center space-y-4">
                 <div className="w-40 h-40 mx-auto rounded-full overflow-hidden bg-gray-100">
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
-                    Photo
-                  </div>
+                  <img
+                    src="/images/coco.jpeg"
+                    alt="Coco"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">Jane Smith</h3>
-                  <p className="text-gray-800 text-lg leading-relaxed">Creative Director</p>
+                  <h3 className="text-xl font-semibold text-gray-900">Coco</h3>
+                  <p className="text-gray-800 text-lg leading-relaxed">Chief Woof Officer</p>
                 </div>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Brief bio or description about the team member and their role in the project.
+                  Coco was in charge of providing woofs and pets during the critical development phase of Visarely Punks.
                 </p>
               </div>
               <div className="text-center space-y-4">
@@ -347,11 +349,11 @@ export function InfoTabs() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-gray-900">Mike Johnson</h3>
-                  <p className="text-gray-800 text-lg leading-relaxed">Technical Lead</p>
+                  <h3 className="text-xl font-semibold text-gray-900">TBD</h3>
+                  <p className="text-gray-800 text-lg leading-relaxed">TBD</p>
                 </div>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Brief bio or description about the team member and their role in the project.
+                  Been wanting to be on the team of an up-and-coming NFT project? DM me on X.
                 </p>
               </div>
             </div>
@@ -386,13 +388,13 @@ export function InfoTabs() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">How is this project different from other NFT projects?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Well, for one, the primary sales are immediately deposited into Aave v3 on Base to immediately start making the NFT project itself richer. Every other NFT mint you've ever participated in has it so that the primary market sales AND secondary market sales go into the founder wallet for completely mysterious reasons. Are they going to use those funds to grow the NFT project or buy a lambo for the founding team? This project is different, I just want to make the NFT project itself richer indefinitely and see where that goes. I don't pay myself anything of course, I&apos;m just in this for the fun and life XP.
+                  Well, for one, the primary sales are immediately deposited into Aave v3 on Base to immediately start making the NFT project itself richer. Every other NFT mint you&apos;ve ever participated in has it so that the primary market sales AND secondary market sales go into the founder wallet for completely mysterious reasons. Are they going to use those funds to grow the NFT project or buy a lambo for the founding team? This project is different, I just want to make the NFT project itself richer indefinitely and see where that goes. I don&apos;t pay myself anything of course, I&apos;m just in this for the fun and life XP.
                 </p>
               </div>
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-900">As a Visarely Punk holder, what do I get?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
-                  Initially, you just get a beautiful and unique NFT (you should set it as your profile picture on X!). The goal is to move to a DAO-based governance where each NFT can vote 1:1 on what to do with the treasury. The more Visarely Punks one owns, the more power they have in the DAO. Initially, the Visarely team has full control of the treasury to ensure a smooth and secure transition to DAO-based governance. Don't worry, the goal is to make the treasury rich indefinitely, whoever owns it. The founder team is fully doxed and has ZERO interest in rug pulling.
+                  Initially, you just get a beautiful and unique NFT (you should set it as your profile picture on X!). The goal is to move to a DAO-based governance where each NFT can vote 1:1 on what to do with the treasury. The more Visarely Punks one owns, the more power they have in the DAO. Initially, the Visarely team has full control of the treasury to ensure a smooth and secure transition to DAO-based governance. Don&apos;t worry, the goal is to make the treasury rich indefinitely, whoever owns it, so that Visarely Punk NFTs consequentially increase in value. The founder team is fully doxed and has ZERO interest in rug pulling.
                 </p>
               </div>
               <div className="space-y-4">
@@ -459,6 +461,12 @@ export function InfoTabs() {
                 <h3 className="text-lg font-semibold text-gray-900">Why Visarely?</h3>
                 <p className="text-gray-800 text-lg leading-relaxed">
                   It sounds cool! Initially, the idea was to make the art a bit more grid-like and wave-patterned, where each NFT would have a ton of little Visarely Punks floating around in cool placements (replicating Victor Visarely&apos;s optical art). But they came out so cute and cool that I decided to make them PFPs.
+                </p>
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Can I still get 450 USDC back on my NFT AFTER the collection is fully minted?</h3>
+                <p className="text-gray-800 text-lg leading-relaxed">
+                  Nope! The refund is only available if the collection is not fully minted. When the treasury becomes DAO-owned, nothing stops you from submitting a proposal, for the DAO's approval, to refund your NFT for 450 USDC though. 🤷‍♂️
                 </p>
               </div>
             </div>

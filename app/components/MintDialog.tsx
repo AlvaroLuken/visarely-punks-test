@@ -5,8 +5,8 @@ import { useAccount, useWriteContract, useWaitForTransactionReceipt, useContract
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
-import { createPublicClient, http, Transport, type PublicClient, erc20Abi } from 'viem'
-import { sepolia } from 'viem/chains'
+import { createPublicClient, http, erc20Abi } from 'viem'
+import { base } from 'viem/chains'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract'
 
 const USDC_ADDRESS = process.env.NEXT_PUBLIC_USDC_ADDRESS as `0x${string}`
@@ -14,12 +14,12 @@ if (!USDC_ADDRESS) {
   throw new Error('USDC_ADDRESS not found in environment variables')
 }
 
-const MINT_PRICE = 1_000_000n // 1 USDC for testnet
+const MINT_PRICE = 500_000_000n // 500 USDC
 
 const customHttpTransport = http("/api/alchemy");
 
 export const publicClient = createPublicClient({
-  chain: sepolia,
+  chain: base,
   transport: customHttpTransport,
 });
 
@@ -276,7 +276,7 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
               </div>
               <div className="flex flex-col w-full gap-3">
                 <Button
-                  onClick={() => window.open(`https://testnets.opensea.io/assets/sepolia/${CONTRACT_ADDRESS}/${tokenId}`, '_blank')}
+                  onClick={() => window.open(`https://opensea.io/assets/base/${CONTRACT_ADDRESS}/${tokenId}`, '_blank')}
                   variant="outline"
                   size="lg"
                   className="gap-2"
@@ -289,7 +289,7 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
                   See on OpenSea
                 </Button>
                 <Button
-                  onClick={() => window.open(`https://twitter.com/intent/tweet?text=Just minted Visarely Punk %23${tokenId}! 🎨&url=https://testnets.opensea.io/assets/sepolia/${CONTRACT_ADDRESS}/${tokenId}`, '_blank')}
+                  onClick={() => window.open(`https://twitter.com/intent/tweet?text=Just minted Visarely Punk %23${tokenId}! 🎨&url=https://opensea.io/assets/base/${CONTRACT_ADDRESS}/${tokenId}`, '_blank')}
                   variant="outline"
                   size="lg"
                   className="gap-2"

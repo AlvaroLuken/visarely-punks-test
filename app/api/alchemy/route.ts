@@ -2,13 +2,20 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     const body = await request.json();
+    
+    const jsonRpcRequest = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: body.method,
+        params: body.params
+    };
 
     const alchemyResponse = await fetch(
-        `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+        `https://base-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
         {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body)
+            body: JSON.stringify(jsonRpcRequest)
         }
     );
 

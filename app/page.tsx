@@ -24,12 +24,12 @@ import usdcLogo from './images/brands/usdc_icon.png'
 import { RedeemSection } from './components/RedeemSection'
 import { createPublicClient, http } from 'viem'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from './lib/constants'
-import { sepolia } from 'viem/chains'
+import { base } from 'viem/chains'
 
 const customHttpTransport = http("/api/alchemy");
 
 export const publicClient = createPublicClient({
-  chain: sepolia,
+  chain: base,
   transport: customHttpTransport,
 });
 

@@ -1,16 +1,14 @@
 'use client'
 
 import { WagmiProvider, createConfig } from "wagmi";
-import { sepolia } from "wagmi/chains";
+import { base } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 
-/// When ready for mainnet, you'll just need to replace baseSepolia with base in the Web3Provider configuration.
-
 const config = createConfig(
     getDefaultConfig({
-        chains: [sepolia],
-        walletConnectProjectId: 'b3aaf7f0ab0ac22709868bc1e4494bec',
+        chains: [base],
+        walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
         appName: "Visarely Punks",
         appDescription: "Generative art collection merging Vasarely with CryptoPunks",
     }),

@@ -276,7 +276,7 @@ export function InfoTabs() {
                       {treasuryBalance ? 
                         `${Number(treasuryBalance).toLocaleString(undefined, {
                           minimumFractionDigits: 2,
-                          maximumFractionDigits: 6
+                          maximumFractionDigits: 2
                         })} USDC` : 
                         'Loading...'
                       }

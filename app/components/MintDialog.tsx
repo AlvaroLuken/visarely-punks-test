@@ -112,17 +112,50 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
     console.log('Starting mint process...')
     
     try {
-      await writeMint({
+      writeMint({
         address: CONTRACT_ADDRESS,
         abi: CONTRACT_ABI,
         functionName: 'mint',
         args: []
       })
-      console.log('Mint transaction sent:', mintHash)
     } catch (error) {
       console.error('Error minting:', error)
     }
   }
+
+  // Add this effect to monitor the transaction
+  useEffect(() => {
+    if (mintHash) {
+      console.log('Mint transaction sent:', mintHash)
+    }
+  }, [mintHash])
+
+  // Monitor mint status
+  useEffect(() => {
+    if (isMintLoading) {
+      console.log('Mint transaction in progress...')
+    }
+    if (isMintSuccess && mintHash) {
+      console.log('Mint successful, getting transaction receipt...')
+      publicClient.getTransactionReceipt({ hash: mintHash })
+        .then(async (receipt) => {
+          console.log('Full receipt:', receipt)
+          
+          const total = await publicClient.readContract({
+            address: CONTRACT_ADDRESS,
+            abi: CONTRACT_ABI,
+            functionName: 'totalMinted',
+          })
+          
+          const newTokenId = Number(total)
+          console.log('New token ID:', newTokenId)
+          setTokenId(newTokenId)
+          await fetchNFTData(newTokenId)
+          onMintSuccess(newTokenId)
+        })
+        .catch(console.error)
+    }
+  }, [isMintLoading, isMintSuccess, mintHash])
 
   // Fetch NFT data
   const fetchNFTData = async (tokenId: number) => {
@@ -164,30 +197,6 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
       console.error('Error fetching token URI:', e)
     }
   }
-
-  // Monitor mint status
-  useEffect(() => {
-    if (isMintSuccess && mintHash) {
-      console.log('Mint successful, getting transaction receipt...')
-      publicClient.getTransactionReceipt({ hash: mintHash })
-        .then(async (receipt) => {
-          console.log('Full receipt:', receipt)
-          
-          const total = await publicClient.readContract({
-            address: CONTRACT_ADDRESS,
-            abi: CONTRACT_ABI,
-            functionName: 'totalMinted',
-          })
-          
-          const newTokenId = Number(total)
-          console.log('New token ID:', newTokenId)
-          setTokenId(newTokenId)
-          await fetchNFTData(newTokenId)
-          onMintSuccess(newTokenId)
-        })
-        .catch(console.error)
-    }
-  }, [isMintSuccess, mintHash])
 
   const renderButton = () => {
     if (!address) {

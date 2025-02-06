@@ -243,7 +243,7 @@ export function InfoTabs() {
                   <p className="text-gray-800 text-lg">
                     No real utility. The collection is purely for aesthetic and community-building purposes.<br /><br />
                     The goal is to have fun and increase the value and wealth of the Visarely Treasury.<br /><br />
-                    Each NFT is worth 500 USDC and a main goal of this project is to preserve that value indefinitely. 1/2000th of the treasury should always be worth at least 500 USDC. The treasury will take on investment opportunities that will increase the treasury value; and hence increase the value of a Visarely Punk beyond 500 USDC ��.
+                    Each NFT is worth 500 USDC and a main goal of this project is to preserve that value indefinitely. 1/2000th of the treasury should always be worth at least 500 USDC. The treasury will take on investment opportunities that will increase the treasury value; and, in theory, increase the value of a Visarely Punk beyond 500 USDC ��.
                   </p>
                 </div>
                 <div className="text-center p-6 rounded-lg bg-gray-50/80 backdrop-blur-sm">

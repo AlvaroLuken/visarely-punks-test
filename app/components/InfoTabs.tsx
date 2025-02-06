@@ -107,14 +107,14 @@ export function InfoTabs() {
 
   return (
     <Tabs defaultValue="about" className="w-full">
-      <TabsList className="grid w-full grid-cols-7 mb-8 h-auto p-1">
-        <TabsTrigger value="about" className="text-lg font-medium px-4 py-2">About</TabsTrigger>
-        <TabsTrigger value="how" className="text-lg font-medium px-4 py-2">How It Works</TabsTrigger>
-        <TabsTrigger value="details" className="text-lg font-medium px-4 py-2">Details</TabsTrigger>
-        <TabsTrigger value="tokenomics" className="text-lg font-medium px-4 py-2">Tokenomics</TabsTrigger>
-        <TabsTrigger value="treasury" className="text-lg font-medium px-4 py-2">Treasury</TabsTrigger>
-        <TabsTrigger value="team" className="text-lg font-medium px-4 py-2">Team</TabsTrigger>
-        <TabsTrigger value="faq" className="text-lg font-medium px-4 py-2">FAQ</TabsTrigger>
+      <TabsList className="grid w-full grid-cols-2 md:grid-cols-7 mb-8 h-auto p-1 overflow-x-auto gap-1">
+        <TabsTrigger value="about" className="text-lg font-medium px-4 py-2 whitespace-nowrap">About</TabsTrigger>
+        <TabsTrigger value="how" className="text-lg font-medium px-4 py-2 whitespace-nowrap">How It Works</TabsTrigger>
+        <TabsTrigger value="details" className="text-lg font-medium px-4 py-2 whitespace-nowrap">Details</TabsTrigger>
+        <TabsTrigger value="tokenomics" className="text-lg font-medium px-4 py-2 whitespace-nowrap">Tokenomics</TabsTrigger>
+        <TabsTrigger value="treasury" className="text-lg font-medium px-4 py-2 whitespace-nowrap">Treasury</TabsTrigger>
+        <TabsTrigger value="team" className="text-lg font-medium px-4 py-2 whitespace-nowrap">Team</TabsTrigger>
+        <TabsTrigger value="faq" className="text-lg font-medium px-4 py-2 whitespace-nowrap">FAQ</TabsTrigger>
       </TabsList>
 
       <div className="bg-white/50 backdrop-blur-md rounded-2xl p-8 shadow-sm">
@@ -243,7 +243,7 @@ export function InfoTabs() {
                   <p className="text-gray-800 text-lg">
                     No real utility. The collection is purely for aesthetic and community-building purposes.<br /><br />
                     The goal is to have fun and increase the value and wealth of the Visarely Treasury.<br /><br />
-                    Each NFT is worth 500 USDC and a main goal of this project is to preserve that value indefinitely. 1/2000th of the treasury should always be worth at least 500 USDC. The treasury will take on investment opportunities that will increase the treasury value; and hence increase the value of a Visarely Punk beyond 500 USDC 🚀.
+                    Each NFT is worth 500 USDC and a main goal of this project is to preserve that value indefinitely. 1/2000th of the treasury should always be worth at least 500 USDC. The treasury will take on investment opportunities that will increase the treasury value; and hence increase the value of a Visarely Punk beyond 500 USDC ��.
                   </p>
                 </div>
                 <div className="text-center p-6 rounded-lg bg-gray-50/80 backdrop-blur-sm">

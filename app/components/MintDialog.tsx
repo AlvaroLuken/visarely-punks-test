@@ -257,7 +257,7 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
             Insufficient USDC Balance
           </Button>
           <p className="text-sm text-red-600">
-            You need {requiredAmount} USDC to mint ({(requiredAmount - formattedBalance).toLocaleString()} USDC more)
+            You need {requiredAmount} USDC to mint.
           </p>
           <a 
             href="https://bridge.base.org/deposit" 

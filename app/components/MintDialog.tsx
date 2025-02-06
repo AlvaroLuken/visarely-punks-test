@@ -227,20 +227,37 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
     args: [address!],
   })
 
-  // Update renderButton to include more informative balance message
+  // Add this near the top of the component
+  const formatUSDC = (amount: bigint) => {
+    return Number(amount) / 1e6
+  }
+
+  // Update renderButton function
   const renderButton = () => {
     if (!address) {
       return <Button disabled>Connect Wallet to Mint</Button>
     }
 
-    if (usdcBalance && usdcBalance < MINT_PRICE) {
+    const balance = usdcBalance || 0n
+    const formattedBalance = formatUSDC(balance)
+    const requiredAmount = formatUSDC(MINT_PRICE)
+
+    // Always show balance
+    const balanceDisplay = (
+      <p className="text-sm text-gray-600 mb-2">
+        Your USDC Balance: {formattedBalance.toLocaleString()} USDC
+      </p>
+    )
+
+    if (balance < MINT_PRICE) {
       return (
         <div className="space-y-2 text-center">
+          {balanceDisplay}
           <Button disabled className="w-full">
             Insufficient USDC Balance
           </Button>
-          <p className="text-sm text-gray-600">
-            You need {Number(MINT_PRICE) / 1e6} USDC to mint. Current balance: {Number(usdcBalance) / 1e6} USDC
+          <p className="text-sm text-red-600">
+            You need {requiredAmount} USDC to mint ({(requiredAmount - formattedBalance).toLocaleString()} USDC more)
           </p>
           <a 
             href="https://bridge.base.org/deposit" 
@@ -256,34 +273,46 @@ export function MintDialog({ isOpen: initialIsOpen, onClose, onMintSuccess }: Mi
 
     if (isApproveLoading) {
       return (
-        <Button disabled>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Approving USDC...
-        </Button>
+        <div className="space-y-2 text-center">
+          {balanceDisplay}
+          <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Approving USDC...
+          </Button>
+        </div>
       )
     }
 
     if (effectiveAllowance < MINT_PRICE) {
       return (
-        <Button onClick={handleApprove}>
-          Approve USDC
-        </Button>
+        <div className="space-y-2 text-center">
+          {balanceDisplay}
+          <Button onClick={handleApprove}>
+            Approve USDC
+          </Button>
+        </div>
       )
     }
 
     if (isMintLoading) {
       return (
-        <Button disabled>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          Minting...
-        </Button>
+        <div className="space-y-2 text-center">
+          {balanceDisplay}
+          <Button disabled>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Minting...
+          </Button>
+        </div>
       )
     }
 
     return (
-      <Button onClick={handleMint}>
-        Mint NFT ({Number(MINT_PRICE) / 1e6} USDC)
-      </Button>
+      <div className="space-y-2 text-center">
+        {balanceDisplay}
+        <Button onClick={handleMint}>
+          Mint NFT ({requiredAmount} USDC)
+        </Button>
+      </div>
     )
   }
 
